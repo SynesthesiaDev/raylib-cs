@@ -1094,23 +1094,6 @@ public static unsafe partial class Raylib
         }
     }
 
-    /// <summary>Convert wave data to desired format</summary>
-    public static void WaveFormat(ref Wave wave, int sampleRate, int sampleSize, int channels)
-    {
-        fixed (Wave* p = &wave)
-        {
-            WaveFormat(p, sampleRate, sampleSize, channels);
-        }
-    }
-
-    /// <summary>Crop a wave to defined frames range</summary>
-    public static void WaveCrop(ref Wave wave, int initFrame, int finalFrame)
-    {
-        fixed (Wave* p = &wave)
-        {
-            WaveCrop(p, initFrame, finalFrame);
-        }
-    }
 
     /// <summary>Draw lines sequence</summary>
     public static void DrawLineStrip(Vector2[] points, int pointCount, Color color)
@@ -1316,103 +1299,6 @@ public static unsafe partial class Raylib
         fixed (Matrix4x4* p = transforms)
         {
             DrawMeshInstanced(mesh, material, p, instances);
-        }
-    }
-
-    /// <summary>Load wave data from file</summary>
-    public static Wave LoadWave(string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return LoadWave(str1.AsPointer());
-    }
-
-    /// <summary>
-    /// Load wave from managed memory, fileType refers to extension: i.e. ".wav"
-    /// </summary>
-    public static Wave LoadWaveFromMemory(string fileType, byte[] fileData)
-    {
-        using AnsiBuffer fileTypeNative = fileType.ToAnsiBuffer();
-
-        fixed (byte* fileDataNative = fileData)
-        {
-            Wave wave = LoadWaveFromMemory(
-                fileTypeNative.AsPointer(),
-                fileDataNative,
-                fileData.Length
-            );
-
-            return wave;
-        }
-    }
-
-    /// <summary>Load sound from file</summary>
-    public static Sound LoadSound(string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return LoadSound(str1.AsPointer());
-    }
-
-    /// <summary>Export wave data to file</summary>
-    public static CBool ExportWave(Wave wave, string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return ExportWave(wave, str1.AsPointer());
-    }
-
-    /// <summary>Export wave sample data to code (.h)</summary>
-    public static CBool ExportWaveAsCode(Wave wave, string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return ExportWaveAsCode(wave, str1.AsPointer());
-    }
-
-    /// <summary>Load music stream from file</summary>
-    public static Music LoadMusicStream(string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return LoadMusicStream(str1.AsPointer());
-    }
-
-    /// <summary>
-    /// Load music stream from managed memory, fileType refers to extension: i.e. ".wav"
-    /// </summary>
-    public static Music LoadMusicStreamFromMemory(string fileType, byte[] fileData)
-    {
-        using AnsiBuffer fileTypeNative = fileType.ToAnsiBuffer();
-
-        fixed (byte* fileDataNative = fileData)
-        {
-            Music music = LoadMusicStreamFromMemory(
-                fileTypeNative.AsPointer(),
-                fileDataNative,
-                fileData.Length
-            );
-
-            return music;
-        }
-    }
-
-    /// <summary>
-    /// Attach audio stream processor to the entire audio pipeline
-    /// </summary>
-    public static void AttachAudioMixedProcessor(AudioCallback<float> processor)
-    {
-        if (AudioMixed.Callback == null)
-        {
-            AudioMixed.Callback = processor;
-            AttachAudioMixedProcessor(&AudioMixed.Processor);
-        }
-    }
-
-    /// <summary>
-    /// Detach audio stream processor from the entire audio pipeline
-    /// </summary>
-    public static void DetachAudioMixedProcessor(AudioCallback<float> processor)
-    {
-        if (AudioMixed.Callback == processor)
-        {
-            DetachAudioMixedProcessor(&AudioMixed.Processor);
-            AudioMixed.Callback = null;
         }
     }
 

@@ -89,6 +89,12 @@ public enum ConfigFlags : uint
     /// Set to try enabling interlaced video format (for V3D)
     /// </summary>
     InterlacedHint = 0x00010000,
+
+    /// <summary>
+    /// Set to try to initialize the stencil buffer to 8 bits
+    /// </summary>
+
+    StencilBuffer8Bit = 0x00020000,
 }
 
 /// <summary>

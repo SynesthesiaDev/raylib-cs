@@ -1,14 +1,9 @@
-![Raylib-cs Logo](Raylib-cs/logo/raylib-cs_256x256.png "Raylib-cs Logo")
-
 # Raylib-cs
 
-C# bindings for raylib, a simple and easy-to-use library to learn videogames programming (www.raylib.com)
+Modified Raylib bindings specifically for the Synesthesia engine. Modifications include:
+- Removed audio bindings as Synestehsia uses BASS for audio 
 
-[![GitHub contributors](https://img.shields.io/github/contributors/raylib-cs/raylib-cs)](https://github.com/raylib-cs/raylib-cs/graphs/contributors)
-[![License](https://img.shields.io/badge/license-zlib%2Flibpng-blue.svg)](LICENSE)
-[![Chat on Discord](https://img.shields.io/discord/426912293134270465.svg?logo=discord)](https://discord.gg/raylib)
-[![GitHub stars](https://img.shields.io/github/stars/raylib-cs/raylib-cs?style=social)](https://github.com/raylib-cs/raylib-cs/stargazers)
-[![Build](https://github.com/raylib-cs/raylib-cs/workflows/Build/badge.svg)](https://github.com/raylib-cs/raylib-cs/actions?query=workflow%3ABuild)
+---
 
 Raylib-cs targets net6.0 net8.0 and uses the [official 5.5 release](https://github.com/raysan5/raylib/releases/tag/5.5)
 to build the native libraries.
@@ -16,11 +11,11 @@ to build the native libraries.
 ## Status
 
 Raylib-cs is passively maintained. Occasional updates may be released from time to time. Pull requests may be
-accepted if they don't have a large maintainence burden.
+accepted if they don't have a large maintenance burden.
 
 ## Installation - NuGet
 
-This is the prefered method to get started.
+This is the preferred method to get started.
 
 1) Pick a folder in which you would like to start a raylib project. For example "MyRaylibCSProj".
 2) Then from a terminal (for example a VSCode terminal), whilst in the directory you just created

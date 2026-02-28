@@ -33,10 +33,6 @@ public class RaylibTests
         CheckType<Ray>();
         CheckType<RayCollision>();
         CheckType<BoundingBox>();
-        CheckType<Wave>();
-        CheckType<AudioStream>();
-        CheckType<Sound>();
-        CheckType<Music>();
         CheckType<VrDeviceInfo>();
         CheckType<VrStereoConfig>();
         CheckType<RenderBatch>();
