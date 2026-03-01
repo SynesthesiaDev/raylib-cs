@@ -1423,6 +1423,10 @@ int InitPlatform(void)
     // Window flags requested before initialization to be applied after initialization
     unsigned int requestedWindowFlags = CORE.Window.flags;
 
+    if (FLAG_IS_SET(CORE.Window.flags, FLAG_STENCIL_BUFFER_8_BIT))
+    {
+        glfwWindowHint(GLFW_STENCIL_BITS, 8);
+    }
     // Check window creation flags
     if (FLAG_IS_SET(CORE.Window.flags, FLAG_WINDOW_HIDDEN)) glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // Visible window
     else glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);     // Window initially hidden

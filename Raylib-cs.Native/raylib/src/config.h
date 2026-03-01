@@ -49,7 +49,7 @@
     #define SUPPORT_MODULE_RMODELS      1
 #endif
 #ifndef SUPPORT_MODULE_RAUDIO
-    #define SUPPORT_MODULE_RAUDIO       0
+    #define SUPPORT_MODULE_RAUDIO       1
 #endif
 
 //------------------------------------------------------------------------------------

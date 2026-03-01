@@ -195,7 +195,7 @@ jobs:
           echo "Generated Version: $VERSION"
 
       - name: create NuGet Package
-        run: dotnet pack Raylib-cs -c Release --output nuget /p:Version=${{ steps.versioning.outputs.VERSION }}
+        run: dotnet pack Raylib-cs -c Release --output nuget /p:Version=${{ steps.versioning.outputs.VERSION }} /p:PackageVersion=${{ steps.versioning.outputs.VERSION }}
 
       - name: Create Git Tag
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
