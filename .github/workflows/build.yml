@@ -1,9 +1,9 @@
 name: Build
 on:
   push:
-    branches: ["master"]
+    branches: [ "master" ]
   pull_request:
-    branches: ["*"]
+    branches: [ "*" ]
     paths-ignore:
       - "README.md"
       - ".github/ISSUE_TEMPLATE/**"
@@ -70,7 +70,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        name: [arm64, x64]
+        name: [ arm64, x64 ]
         include:
           - name: arm64
             arch: arm64
@@ -105,7 +105,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        name: [x86, x64]
+        name: [ x86, x64 ]
         include:
           - name: x86
             arch: win32
@@ -141,9 +141,13 @@ jobs:
       - build-linux
       - build-osx
       - build-windows
+    permissions:
+      contents: write
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Need full history for tag counting
 
       - uses: actions/download-artifact@v4.1.7
         with:
@@ -177,23 +181,40 @@ jobs:
             6.0.x
             8.0.x
 
+      - name: Generate CalVer Version
+        id: versioning
+        run: |
+          # Format: YYYY.MMDD.RunNumber
+          DATE_PREFIX=$(date +'%Y.%-m%d')
+
+          git fetch --tags
+          REVISION=$(git tag -l "v${DATE_PREFIX}.*" | wc -l | xargs)
+
+          VERSION="${DATE_PREFIX}.${REVISION}"
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "Generated Version: $VERSION"
+
       - name: create NuGet Package
-        run: dotnet pack Raylib-cs -c Release --output nuget
+        run: dotnet pack Raylib-cs -c Release --output nuget /p:Version=${{ steps.versioning.outputs.VERSION }} /p:PackageVersion=${{ steps.versioning.outputs.VERSION }}
+
+      - name: Create Git Tag
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag v${{ steps.versioning.outputs.VERSION }}
+          git push origin v${{ steps.versioning.outputs.VERSION }}
 
       - name: upload NuGet Package As Artifact
         uses: actions/upload-artifact@v4
         with:
           path: nuget/*
 
-      - name: upload NuGet Package As Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: nuget/*
-
       - name: publish to NuGet
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         run: |
           dotnet nuget push \
-            nuget/* \
-            --api-key ${{secrets.NUGET_API_KEY}}
+            nuget/*.nupkg \
+            --api-key ${{secrets.NUGET_API_KEY}} \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
