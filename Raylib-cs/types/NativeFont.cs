@@ -59,7 +59,7 @@ public partial struct GlyphInfo
 /// Font, font texture and GlyphInfo array data
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct Font
+public unsafe struct NativeFont
 {
     /// <summary>
     /// Base size (default chars height)

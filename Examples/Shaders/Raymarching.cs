@@ -44,16 +44,16 @@ public class Raymarching
 
         // Load raymarching shader
         // NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-        Shader shader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/raymarching.fs");
+        NativeShader nativeShader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/raymarching.fs");
 
         // Get shader locations for required uniforms
-        int viewEyeLoc = GetShaderLocation(shader, "viewEye");
-        int viewCenterLoc = GetShaderLocation(shader, "viewCenter");
-        int runTimeLoc = GetShaderLocation(shader, "runTime");
-        int resolutionLoc = GetShaderLocation(shader, "resolution");
+        int viewEyeLoc = GetShaderLocation(nativeShader, "viewEye");
+        int viewCenterLoc = GetShaderLocation(nativeShader, "viewCenter");
+        int runTimeLoc = GetShaderLocation(nativeShader, "runTime");
+        int resolutionLoc = GetShaderLocation(nativeShader, "resolution");
 
         float[] resolution = { (float)screenWidth, (float)screenHeight };
-        Raylib.SetShaderValue(shader, resolutionLoc, resolution, ShaderUniformDataType.Vec2);
+        Raylib.SetShaderValue(nativeShader, resolutionLoc, resolution, ShaderUniformDataType.Vec2);
 
         float runTime = 0.0f;
 
@@ -70,7 +70,7 @@ public class Raymarching
                 screenWidth = GetScreenWidth();
                 screenHeight = GetScreenHeight();
                 resolution = new float[] { (float)screenWidth, (float)screenHeight };
-                Raylib.SetShaderValue(shader, resolutionLoc, resolution, ShaderUniformDataType.Vec2);
+                Raylib.SetShaderValue(nativeShader, resolutionLoc, resolution, ShaderUniformDataType.Vec2);
             }
 
             // Update
@@ -81,9 +81,9 @@ public class Raymarching
             runTime += deltaTime;
 
             // Set shader required uniform values
-            Raylib.SetShaderValue(shader, viewEyeLoc, camera.Position, ShaderUniformDataType.Vec3);
-            Raylib.SetShaderValue(shader, viewCenterLoc, camera.Target, ShaderUniformDataType.Vec3);
-            Raylib.SetShaderValue(shader, runTimeLoc, runTime, ShaderUniformDataType.Float);
+            Raylib.SetShaderValue(nativeShader, viewEyeLoc, camera.Position, ShaderUniformDataType.Vec3);
+            Raylib.SetShaderValue(nativeShader, viewCenterLoc, camera.Target, ShaderUniformDataType.Vec3);
+            Raylib.SetShaderValue(nativeShader, runTimeLoc, runTime, ShaderUniformDataType.Float);
             //----------------------------------------------------------------------------------
 
             // Draw
@@ -93,7 +93,7 @@ public class Raymarching
 
             // We only draw a white full-screen rectangle,
             // frame is generated in shader using raymarching
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
             DrawRectangle(0, 0, screenWidth, screenHeight, Color.White);
             EndShaderMode();
 
@@ -111,7 +111,7 @@ public class Raymarching
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

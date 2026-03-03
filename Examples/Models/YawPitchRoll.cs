@@ -36,9 +36,9 @@ public class YawPitchRoll
         camera.Projection = CameraProjection.Perspective;
 
         // Model loading
-        Model model = LoadModel("resources/models/obj/plane.obj");
+        NativeModel nativeModel = LoadModel("resources/models/obj/plane.obj");
         Texture2D texture = LoadTexture("resources/models/obj/plane_diffuse.png");
-        model.Materials[0].Maps[(int)MaterialMapIndex.Diffuse].Texture = texture;
+        nativeModel.Materials[0].Maps[(int)MaterialMapIndex.Diffuse].Texture = texture;
 
         float pitch = 0.0f;
         float roll = 0.0f;
@@ -116,7 +116,7 @@ public class YawPitchRoll
             }
 
             // Tranformation matrix for rotations
-            model.Transform = MatrixRotateXYZ(new Vector3(DEG2RAD * pitch, DEG2RAD * yaw, DEG2RAD * roll));
+            nativeModel.Transform = MatrixRotateXYZ(new Vector3(DEG2RAD * pitch, DEG2RAD * yaw, DEG2RAD * roll));
             //----------------------------------------------------------------------------------
 
             // Draw
@@ -128,7 +128,7 @@ public class YawPitchRoll
             BeginMode3D(camera);
 
             // Draw 3d model with texture
-            DrawModel(model, new Vector3(0.0f, -8.0f, 0.0f), 1.0f, Color.White);
+            DrawModel(nativeModel, new Vector3(0.0f, -8.0f, 0.0f), 1.0f, Color.White);
             DrawGrid(10, 10.0f);
 
             EndMode3D();
@@ -154,7 +154,7 @@ public class YawPitchRoll
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadModel(model);
+        UnloadModel(nativeModel);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

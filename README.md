@@ -1,8 +1,16 @@
-![Raylib-cs Logo](Raylib-cs/logo/raylib-cs_256x256.png "Raylib-cs Logo")
-
 # Raylib-cs
 
-C# bindings for raylib, a simple and easy-to-use library to learn videogames programming (www.raylib.com)
+C# bindings for raylib. Modified for use in [Synesthesia Engine](https://github.com/SynesthesiaDev/Synesthesia) with the following modifications:
+- Removed bindings for audio as Synesthesia uses [BASS](https://www.un4seen.com/bass.html)
+- Added support for stencil testing
+- Added `StencilBuffer8Bit` config flag to initialize stencil buffer to 8 bits
+- Renamed `Shader` -> `NativeShader`
+- Renamed `Font` -> `NativeFont`
+- Renamed `Model` -> `NativeMode`
+- Renamed `Mesh` -> `NativeMesh`
+- Renamed `Transform` -> `NativeTransform`
+
+---
 
 [![GitHub contributors](https://img.shields.io/github/contributors/raylib-cs/raylib-cs)](https://github.com/raylib-cs/raylib-cs/graphs/contributors)
 [![License](https://img.shields.io/badge/license-zlib%2Flibpng-blue.svg)](LICENSE)

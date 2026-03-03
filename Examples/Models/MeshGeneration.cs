@@ -30,7 +30,7 @@ public class MeshGeneration
         Texture2D texture = LoadTextureFromImage(isChecked);
         UnloadImage(isChecked);
 
-        Model[] models = new Model[9];
+        NativeModel[] models = new NativeModel[9];
 
         models[0] = LoadModelFromMesh(GenMeshPlane(2, 2, 5, 5));
         models[1] = LoadModelFromMesh(GenMeshCube(2.0f, 1.0f, 2.0f));
@@ -147,15 +147,15 @@ public class MeshGeneration
     }
 
     // Generate a simple triangle mesh from code
-    private static Mesh GenMeshCustom()
+    private static NativeMesh GenMeshCustom()
     {
-        Mesh mesh = new(3, 1);
-        mesh.AllocVertices();
-        mesh.AllocTexCoords();
-        mesh.AllocNormals();
-        Span<Vector3> vertices = mesh.VerticesAs<Vector3>();
-        Span<Vector2> texcoords = mesh.TexCoordsAs<Vector2>();
-        Span<Vector3> normals = mesh.NormalsAs<Vector3>();
+        NativeMesh nativeMesh = new(3, 1);
+        nativeMesh.AllocVertices();
+        nativeMesh.AllocTexCoords();
+        nativeMesh.AllocNormals();
+        Span<Vector3> vertices = nativeMesh.VerticesAs<Vector3>();
+        Span<Vector2> texcoords = nativeMesh.TexCoordsAs<Vector2>();
+        Span<Vector3> normals = nativeMesh.NormalsAs<Vector3>();
 
         // Vertex at (0, 0, 0)
         vertices[0] = new(0, 0, 0);
@@ -173,8 +173,8 @@ public class MeshGeneration
         texcoords[2] = new(1, 0);
 
         // Upload mesh data from CPU (RAM) to GPU (VRAM) memory
-        UploadMesh(ref mesh, false);
+        UploadMesh(ref nativeMesh, false);
 
-        return mesh;
+        return nativeMesh;
     }
 }

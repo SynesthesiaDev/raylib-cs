@@ -11,7 +11,6 @@
 *
 ********************************************************************************************/
 
-using System;
 using System.Numerics;
 using static Raylib_cs.Raylib;
 using static Raylib_cs.Raymath;
@@ -61,6 +60,7 @@ public class Camera2dPlatformer
         const int screenWidth = 800;
         const int screenHeight = 450;
 
+        SetConfigFlags(ConfigFlags.StencilBuffer8Bit);
         InitWindow(screenWidth, screenHeight, "raylib [core] example - 2d camera");
 
         Player player = new();

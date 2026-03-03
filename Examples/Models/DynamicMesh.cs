@@ -25,13 +25,13 @@ public class DynamicMesh
         // Generate a dynamic mesh using utils to allocate/access mesh attribute data
         const int triangleRows = 48;
         const int vertexRows = triangleRows + 1;
-        Mesh dynamicMesh = new(vertexRows * vertexRows, triangleRows * triangleRows * 2);
-        dynamicMesh.AllocVertices();
-        dynamicMesh.AllocTexCoords();
-        dynamicMesh.AllocIndices();
-        Span<Vector3> vertices = dynamicMesh.VerticesAs<Vector3>();
-        Span<Vector2> texcoords = dynamicMesh.TexCoordsAs<Vector2>();
-        Span<ushort> indices = dynamicMesh.IndicesAs<ushort>();
+        NativeMesh dynamicNativeMesh = new(vertexRows * vertexRows, triangleRows * triangleRows * 2);
+        dynamicNativeMesh.AllocVertices();
+        dynamicNativeMesh.AllocTexCoords();
+        dynamicNativeMesh.AllocIndices();
+        Span<Vector3> vertices = dynamicNativeMesh.VerticesAs<Vector3>();
+        Span<Vector2> texcoords = dynamicNativeMesh.TexCoordsAs<Vector2>();
+        Span<ushort> indices = dynamicNativeMesh.IndicesAs<ushort>();
         for (int z = 0, i = 0; z < triangleRows; z++)
         {
             for (int x = 0; x < triangleRows; x++, i += 6)
@@ -44,7 +44,7 @@ public class DynamicMesh
                 indices[i + 5] = (ushort)(indices[i] + vertexRows + 1);
             }
         }
-        UploadMesh(ref dynamicMesh, true);
+        UploadMesh(ref dynamicNativeMesh, true);
 
         // Allocate the texture
         Image image = GenImageColor(triangleRows, triangleRows, Color.Blank);
@@ -80,8 +80,8 @@ public class DynamicMesh
                     texcoords[i].Y = (z - noiseX) / triangleRows;
                 }
             }
-            UpdateMeshBuffer<Vector3>(dynamicMesh, Mesh.VboIdIndexVertices, vertices, 0);
-            UpdateMeshBuffer<Vector2>(dynamicMesh, Mesh.VboIdIndexTexCoords, texcoords, 0);
+            UpdateMeshBuffer<Vector3>(dynamicNativeMesh, NativeMesh.VboIdIndexVertices, vertices, 0);
+            UpdateMeshBuffer<Vector2>(dynamicNativeMesh, NativeMesh.VboIdIndexTexCoords, texcoords, 0);
 
             for (int y = 0, i = 0; y < texture.Height; y++)
             {
@@ -101,7 +101,7 @@ public class DynamicMesh
             ClearBackground(Color.RayWhite);
 
             BeginMode3D(camera);
-            DrawMesh(dynamicMesh, material, Matrix4x4.Identity);
+            DrawMesh(dynamicNativeMesh, material, Matrix4x4.Identity);
             EndMode3D();
 
             EndDrawing();
@@ -112,7 +112,7 @@ public class DynamicMesh
         //--------------------------------------------------------------------------------------
         UnloadMaterial(material);
         // Raylib.UnloadTexture(texture); <- No need to unload the texture. UnloadMaterial(Material) already unloaded it for us
-        UnloadMesh(dynamicMesh);
+        UnloadMesh(dynamicNativeMesh);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

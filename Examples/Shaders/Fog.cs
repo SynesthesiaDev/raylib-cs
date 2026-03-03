@@ -54,41 +54,41 @@ public class Fog
         camera.Projection = CameraProjection.Perspective;
 
         // Load models and texture
-        Model modelA = LoadModelFromMesh(GenMeshTorus(0.4f, 1.0f, 16, 32));
-        Model modelB = LoadModelFromMesh(GenMeshCube(1.0f, 1.0f, 1.0f));
-        Model modelC = LoadModelFromMesh(GenMeshSphere(0.5f, 32, 32));
+        NativeModel nativeModelA = LoadModelFromMesh(GenMeshTorus(0.4f, 1.0f, 16, 32));
+        NativeModel nativeModelB = LoadModelFromMesh(GenMeshCube(1.0f, 1.0f, 1.0f));
+        NativeModel nativeModelC = LoadModelFromMesh(GenMeshSphere(0.5f, 32, 32));
         Texture2D texture = LoadTexture("resources/texel_checker.png");
 
         // Assign texture to default model material
-        Raylib.SetMaterialTexture(ref modelA, 0, MaterialMapIndex.Albedo, ref texture);
-        Raylib.SetMaterialTexture(ref modelB, 0, MaterialMapIndex.Albedo, ref texture);
-        Raylib.SetMaterialTexture(ref modelC, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModelA, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModelB, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModelC, 0, MaterialMapIndex.Albedo, ref texture);
 
         // Load shader and set up some uniforms
-        Shader shader = LoadShader("resources/shaders/glsl330/lighting.vs", "resources/shaders/glsl330/fog.fs");
-        shader.Locs[(int)ShaderLocationIndex.MatrixModel] = GetShaderLocation(shader, "matModel");
-        shader.Locs[(int)ShaderLocationIndex.VectorView] = GetShaderLocation(shader, "viewPos");
+        NativeShader nativeShader = LoadShader("resources/shaders/glsl330/lighting.vs", "resources/shaders/glsl330/fog.fs");
+        nativeShader.Locs[(int)ShaderLocationIndex.MatrixModel] = GetShaderLocation(nativeShader, "matModel");
+        nativeShader.Locs[(int)ShaderLocationIndex.VectorView] = GetShaderLocation(nativeShader, "viewPos");
 
         // Ambient light level
-        int ambientLoc = GetShaderLocation(shader, "ambient");
+        int ambientLoc = GetShaderLocation(nativeShader, "ambient");
         Raylib.SetShaderValue(
-            shader,
+            nativeShader,
             ambientLoc,
             new float[] { 0.2f, 0.2f, 0.2f, 1.0f },
             ShaderUniformDataType.Vec4
         );
 
         float fogDensity = 0.15f;
-        int fogDensityLoc = GetShaderLocation(shader, "fogDensity");
-        Raylib.SetShaderValue(shader, fogDensityLoc, fogDensity, ShaderUniformDataType.Float);
+        int fogDensityLoc = GetShaderLocation(nativeShader, "fogDensity");
+        Raylib.SetShaderValue(nativeShader, fogDensityLoc, fogDensity, ShaderUniformDataType.Float);
 
         // NOTE: All models share the same shader
-        Raylib.SetMaterialShader(ref modelA, 0, ref shader);
-        Raylib.SetMaterialShader(ref modelB, 0, ref shader);
-        Raylib.SetMaterialShader(ref modelC, 0, ref shader);
+        Raylib.SetMaterialShader(ref nativeModelA, 0, ref nativeShader);
+        Raylib.SetMaterialShader(ref nativeModelB, 0, ref nativeShader);
+        Raylib.SetMaterialShader(ref nativeModelC, 0, ref nativeShader);
 
         // Using just 1 point lights
-        Rlights.CreateLight(0, LightType.Point, new Vector3(0, 2, 6), Vector3.Zero, Color.White, shader);
+        Rlights.CreateLight(0, LightType.Point, new Vector3(0, 2, 6), Vector3.Zero, Color.White, nativeShader);
 
         SetTargetFPS(60);
         //--------------------------------------------------------------------------------------
@@ -118,16 +118,16 @@ public class Fog
                 }
             }
 
-            Raylib.SetShaderValue(shader, fogDensityLoc, fogDensity, ShaderUniformDataType.Float);
+            Raylib.SetShaderValue(nativeShader, fogDensityLoc, fogDensity, ShaderUniformDataType.Float);
 
             // Rotate the torus
-            modelA.Transform = MatrixMultiply(modelA.Transform, MatrixRotateX(-0.025f));
-            modelA.Transform = MatrixMultiply(modelA.Transform, MatrixRotateZ(0.012f));
+            nativeModelA.Transform = MatrixMultiply(nativeModelA.Transform, MatrixRotateX(-0.025f));
+            nativeModelA.Transform = MatrixMultiply(nativeModelA.Transform, MatrixRotateZ(0.012f));
 
             // Update the light shader with the camera view position
             Raylib.SetShaderValue(
-                shader,
-                shader.Locs[(int)ShaderLocationIndex.VectorView],
+                nativeShader,
+                nativeShader.Locs[(int)ShaderLocationIndex.VectorView],
                 camera.Position,
                 ShaderUniformDataType.Vec3
             );
@@ -141,13 +141,13 @@ public class Fog
             BeginMode3D(camera);
 
             // Draw the three models
-            DrawModel(modelA, Vector3.Zero, 1.0f, Color.White);
-            DrawModel(modelB, new Vector3(-2.6f, 0, 0), 1.0f, Color.White);
-            DrawModel(modelC, new Vector3(2.6f, 0, 0), 1.0f, Color.White);
+            DrawModel(nativeModelA, Vector3.Zero, 1.0f, Color.White);
+            DrawModel(nativeModelB, new Vector3(-2.6f, 0, 0), 1.0f, Color.White);
+            DrawModel(nativeModelC, new Vector3(2.6f, 0, 0), 1.0f, Color.White);
 
             for (int i = -20; i < 20; i += 2)
             {
-                DrawModel(modelA, new Vector3(i, 0, 2), 1.0f, Color.White);
+                DrawModel(nativeModelA, new Vector3(i, 0, 2), 1.0f, Color.White);
             }
 
             EndMode3D();
@@ -166,12 +166,12 @@ public class Fog
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadModel(modelA);
-        UnloadModel(modelB);
-        UnloadModel(modelC);
+        UnloadModel(nativeModelA);
+        UnloadModel(nativeModelB);
+        UnloadModel(nativeModelC);
 
         UnloadTexture(texture);
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

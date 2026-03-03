@@ -54,7 +54,7 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Load shader from files and bind default locations</summary>
-    public static Shader LoadShader(string vsFileName, string fsFileName)
+    public static NativeShader LoadShader(string vsFileName, string fsFileName)
     {
         using AnsiBuffer str1 = vsFileName.ToAnsiBuffer();
         using AnsiBuffer str2 = fsFileName.ToAnsiBuffer();
@@ -62,7 +62,7 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Load shader from code string and bind default locations</summary>
-    public static Shader LoadShaderFromMemory(string vsCode, string fsCode)
+    public static NativeShader LoadShaderFromMemory(string vsCode, string fsCode)
     {
         using Utf8Buffer str1 = vsCode.ToUtf8Buffer();
         using Utf8Buffer str2 = fsCode.ToUtf8Buffer();
@@ -70,17 +70,17 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Get shader uniform location</summary>
-    public static int GetShaderLocation(Shader shader, string uniformName)
+    public static int GetShaderLocation(NativeShader nativeShader, string uniformName)
     {
         using Utf8Buffer str1 = uniformName.ToUtf8Buffer();
-        return GetShaderLocation(shader, str1.AsPointer());
+        return GetShaderLocation(nativeShader, str1.AsPointer());
     }
 
     /// <summary>Get shader attribute location</summary>
-    public static int GetShaderLocationAttrib(Shader shader, string attribName)
+    public static int GetShaderLocationAttrib(NativeShader nativeShader, string attribName)
     {
         using Utf8Buffer str1 = attribName.ToUtf8Buffer();
-        return GetShaderLocationAttrib(shader, str1.AsPointer());
+        return GetShaderLocationAttrib(nativeShader, str1.AsPointer());
     }
 
     /// <summary>Takes a screenshot of current screen (saved a .png)</summary>
@@ -165,19 +165,19 @@ public static unsafe partial class Raylib
 
     /// <summary>Set shader uniform value vector</summary>
     public static void SetShaderValueV<T>(
-        Shader shader,
+        NativeShader nativeShader,
         int locIndex,
         T[] values,
         ShaderUniformDataType uniformType,
         int count
     ) where T : unmanaged
     {
-        SetShaderValueV(shader, locIndex, (Span<T>)values, uniformType, count);
+        SetShaderValueV(nativeShader, locIndex, (Span<T>)values, uniformType, count);
     }
 
     /// <summary>Set shader uniform value vector</summary>
     public static void SetShaderValueV<T>(
-        Shader shader,
+        NativeShader nativeShader,
         int locIndex,
         Span<T> values,
         ShaderUniformDataType uniformType,
@@ -186,31 +186,31 @@ public static unsafe partial class Raylib
     {
         fixed (T* valuePtr = values)
         {
-            SetShaderValueV(shader, locIndex, valuePtr, uniformType, count);
+            SetShaderValueV(nativeShader, locIndex, valuePtr, uniformType, count);
         }
     }
 
     /// <summary>Set shader uniform value</summary>
-    public static void SetShaderValue<T>(Shader shader, int locIndex, T value, ShaderUniformDataType uniformType)
+    public static void SetShaderValue<T>(NativeShader nativeShader, int locIndex, T value, ShaderUniformDataType uniformType)
     where T : unmanaged
     {
-        SetShaderValue(shader, locIndex, &value, uniformType);
+        SetShaderValue(nativeShader, locIndex, &value, uniformType);
     }
 
     /// <summary>Set shader uniform value</summary>
     public static void SetShaderValue<T>(
-        Shader shader,
+        NativeShader nativeShader,
         int locIndex,
         T[] values,
         ShaderUniformDataType uniformType
     ) where T : unmanaged
     {
-        SetShaderValue(shader, locIndex, (Span<T>)values, uniformType);
+        SetShaderValue(nativeShader, locIndex, (Span<T>)values, uniformType);
     }
 
     /// <summary>Set shader uniform value</summary>
     public static void SetShaderValue<T>(
-        Shader shader,
+        NativeShader nativeShader,
         int locIndex,
         Span<T> values,
         ShaderUniformDataType uniformType
@@ -218,7 +218,7 @@ public static unsafe partial class Raylib
     {
         fixed (T* valuePtr = values)
         {
-            SetShaderValue(shader, locIndex, valuePtr, uniformType);
+            SetShaderValue(nativeShader, locIndex, valuePtr, uniformType);
         }
     }
 
@@ -484,10 +484,10 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Create an image from text (custom sprite font)</summary>
-    public static Image ImageTextEx(Font font, string text, float fontSize, float spacing, Color tint)
+    public static Image ImageTextEx(NativeFont nativeFont, string text, float fontSize, float spacing, Color tint)
     {
         using Utf8Buffer str1 = text.ToUtf8Buffer();
-        return ImageTextEx(font, str1.AsPointer(), fontSize, spacing, tint);
+        return ImageTextEx(nativeFont, str1.AsPointer(), fontSize, spacing, tint);
     }
 
     /// <summary>Convert image to POT (power-of-two)</summary>
@@ -929,7 +929,7 @@ public static unsafe partial class Raylib
     /// <summary>Draw text (custom sprite font) within an image (destination)</summary>
     public static void ImageDrawTextEx(
         ref Image dst,
-        Font font,
+        NativeFont nativeFont,
         string text,
         Vector2 position,
         int fontSize,
@@ -940,7 +940,7 @@ public static unsafe partial class Raylib
         using Utf8Buffer str1 = text.ToUtf8Buffer();
         fixed (Image* p = &dst)
         {
-            ImageDrawTextEx(p, font, str1.AsPointer(), position, fontSize, spacing, color);
+            ImageDrawTextEx(p, nativeFont, str1.AsPointer(), position, fontSize, spacing, color);
         }
     }
 
@@ -991,7 +991,7 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Load font from file into GPU memory (VRAM)</summary>
-    public static Font LoadFont(string fileName)
+    public static NativeFont LoadFont(string fileName)
     {
         using AnsiBuffer str1 = fileName.ToAnsiBuffer();
         return LoadFont(str1.AsPointer());
@@ -1001,7 +1001,7 @@ public static unsafe partial class Raylib
     /// Load font from file with extended parameters, use NULL for codepoints and 0 for codepointCount to load
     /// the default character set, font size is provided in pixels height
     /// </summary>
-    public static Font LoadFontEx(string fileName, int fontSize, int[] codepoints, int codepointCount)
+    public static NativeFont LoadFontEx(string fileName, int fontSize, int[] codepoints, int codepointCount)
     {
         using AnsiBuffer str1 = fileName.ToAnsiBuffer();
         fixed (int* p = codepoints)
@@ -1013,7 +1013,7 @@ public static unsafe partial class Raylib
     /// <summary>
     /// Load font from managed memory, fileType refers to extension: i.e. ".ttf"
     /// </summary>
-    public static Font LoadFontFromMemory(
+    public static NativeFont LoadFontFromMemory(
         string fileType,
         byte[] fileData,
         int fontSize,
@@ -1026,7 +1026,7 @@ public static unsafe partial class Raylib
         {
             fixed (int* fontCharsNative = codepoints)
             {
-                Font font = LoadFontFromMemory(
+                NativeFont nativeFont = LoadFontFromMemory(
                     fileTypeNative.AsPointer(),
                     fileDataNative,
                     fileData.Length,
@@ -1034,26 +1034,26 @@ public static unsafe partial class Raylib
                     fontCharsNative,
                     codepointCount
                 );
-                return font;
+                return nativeFont;
             }
         }
     }
 
     /// <summary>Upload vertex data into GPU and provided VAO/VBO ids</summary>
-    public static void UploadMesh(ref Mesh mesh, CBool dynamic)
+    public static void UploadMesh(ref NativeMesh nativeMesh, CBool dynamic)
     {
-        fixed (Mesh* p = &mesh)
+        fixed (NativeMesh* p = &nativeMesh)
         {
             UploadMesh(p, dynamic);
         }
     }
 
     /// <summary> Update mesh vertex data in GPU for a specific buffer index </summary>
-    public static void UpdateMeshBuffer<T>(Mesh mesh, int index, ReadOnlySpan<T> data, int offset) where T : unmanaged
+    public static void UpdateMeshBuffer<T>(NativeMesh nativeMesh, int index, ReadOnlySpan<T> data, int offset) where T : unmanaged
     {
         fixed (void* dataPtr = data)
         {
-            UpdateMeshBuffer(mesh, index, dataPtr, data.Length * sizeof(T), offset);
+            UpdateMeshBuffer(nativeMesh, index, dataPtr, data.Length * sizeof(T), offset);
         }
     }
 
@@ -1067,9 +1067,9 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Set material for a mesh</summary>
-    public static void SetModelMeshMaterial(ref Model model, int meshId, int materialId)
+    public static void SetModelMeshMaterial(ref NativeModel nativeModel, int meshId, int materialId)
     {
-        fixed (Model* p = &model)
+        fixed (NativeModel* p = &nativeModel)
         {
             SetModelMeshMaterial(p, meshId, materialId);
         }
@@ -1086,31 +1086,31 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Compute mesh tangents</summary>
-    public static void GenMeshTangents(ref Mesh mesh)
+    public static void GenMeshTangents(ref NativeMesh nativeMesh)
     {
-        fixed (Mesh* p = &mesh)
+        fixed (NativeMesh* p = &nativeMesh)
         {
             GenMeshTangents(p);
         }
     }
 
     /// <summary>Convert wave data to desired format</summary>
-    public static void WaveFormat(ref Wave wave, int sampleRate, int sampleSize, int channels)
-    {
-        fixed (Wave* p = &wave)
-        {
-            WaveFormat(p, sampleRate, sampleSize, channels);
-        }
-    }
+    // public static void WaveFormat(ref Wave wave, int sampleRate, int sampleSize, int channels)
+    // {
+    //     fixed (Wave* p = &wave)
+    //     {
+    //         WaveFormat(p, sampleRate, sampleSize, channels);
+    //     }
+    // }
 
     /// <summary>Crop a wave to defined frames range</summary>
-    public static void WaveCrop(ref Wave wave, int initFrame, int finalFrame)
-    {
-        fixed (Wave* p = &wave)
-        {
-            WaveCrop(p, initFrame, finalFrame);
-        }
-    }
+    // public static void WaveCrop(ref Wave wave, int initFrame, int finalFrame)
+    // {
+    //     fixed (Wave* p = &wave)
+    //     {
+    //         WaveCrop(p, initFrame, finalFrame);
+    //     }
+    // }
 
     /// <summary>Draw lines sequence</summary>
     public static void DrawLineStrip(Vector2[] points, int pointCount, Color color)
@@ -1192,15 +1192,15 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Draw text using font and additional parameters</summary>
-    public static void DrawTextEx(Font font, string text, Vector2 position, float fontSize, float spacing, Color tint)
+    public static void DrawTextEx(NativeFont nativeFont, string text, Vector2 position, float fontSize, float spacing, Color tint)
     {
         using Utf8Buffer str1 = text.ToUtf8Buffer();
-        DrawTextEx(font, str1.AsPointer(), position, fontSize, spacing, tint);
+        DrawTextEx(nativeFont, str1.AsPointer(), position, fontSize, spacing, tint);
     }
 
     /// <summary>Draw text using Font and pro parameters (rotation)</summary>
     public static void DrawTextPro(
-        Font font,
+        NativeFont nativeFont,
         string text,
         Vector2 position,
         Vector2 origin,
@@ -1211,7 +1211,7 @@ public static unsafe partial class Raylib
     )
     {
         using Utf8Buffer str1 = text.ToUtf8Buffer();
-        DrawTextPro(font, str1.AsPointer(), position, origin, rotation, fontSize, spacing, tint);
+        DrawTextPro(nativeFont, str1.AsPointer(), position, origin, rotation, fontSize, spacing, tint);
     }
 
     /// <summary>Measure string width for default font</summary>
@@ -1222,10 +1222,10 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Measure string size for Font</summary>
-    public static Vector2 MeasureTextEx(Font font, string text, float fontSize, float spacing)
+    public static Vector2 MeasureTextEx(NativeFont nativeFont, string text, float fontSize, float spacing)
     {
         using Utf8Buffer str1 = text.ToUtf8Buffer();
-        return MeasureTextEx(font, str1.AsPointer(), fontSize, spacing);
+        return MeasureTextEx(nativeFont, str1.AsPointer(), fontSize, spacing);
     }
 
     /// <summary>Get all codepoints in a string, codepoints count returned by parameters</summary>
@@ -1281,24 +1281,24 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Draw a model (with texture if set)</summary>
-    public static Model LoadModel(string fileName)
+    public static NativeModel LoadModel(string fileName)
     {
         using AnsiBuffer str1 = fileName.ToAnsiBuffer();
         return LoadModel(str1.AsPointer());
     }
 
     /// <summary>Export mesh data to file, returns true on success</summary>
-    public static CBool ExportMesh(Mesh mesh, string fileName)
+    public static CBool ExportMesh(NativeMesh nativeMesh, string fileName)
     {
         using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return ExportMesh(mesh, str1.AsPointer());
+        return ExportMesh(nativeMesh, str1.AsPointer());
     }
 
     /// <summary>Export mesh as code file (.h) defining multiple arrays of vertex attributes</summary>
-    public static CBool ExportMeshAsCode(Mesh mesh, string fileName)
+    public static CBool ExportMeshAsCode(NativeMesh nativeMesh, string fileName)
     {
         using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return ExportMeshAsCode(mesh, str1.AsPointer());
+        return ExportMeshAsCode(nativeMesh, str1.AsPointer());
     }
 
     /// <summary>Draw a triangle strip defined by points</summary>
@@ -1311,139 +1311,139 @@ public static unsafe partial class Raylib
     }
 
     /// <summary>Draw multiple mesh instances with material and different transforms</summary>
-    public static void DrawMeshInstanced(Mesh mesh, Material material, Matrix4x4[] transforms, int instances)
+    public static void DrawMeshInstanced(NativeMesh nativeMesh, Material material, Matrix4x4[] transforms, int instances)
     {
         fixed (Matrix4x4* p = transforms)
         {
-            DrawMeshInstanced(mesh, material, p, instances);
+            DrawMeshInstanced(nativeMesh, material, p, instances);
         }
     }
-
-    /// <summary>Load wave data from file</summary>
-    public static Wave LoadWave(string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return LoadWave(str1.AsPointer());
-    }
-
-    /// <summary>
-    /// Load wave from managed memory, fileType refers to extension: i.e. ".wav"
-    /// </summary>
-    public static Wave LoadWaveFromMemory(string fileType, byte[] fileData)
-    {
-        using AnsiBuffer fileTypeNative = fileType.ToAnsiBuffer();
-
-        fixed (byte* fileDataNative = fileData)
-        {
-            Wave wave = LoadWaveFromMemory(
-                fileTypeNative.AsPointer(),
-                fileDataNative,
-                fileData.Length
-            );
-
-            return wave;
-        }
-    }
-
-    /// <summary>Load sound from file</summary>
-    public static Sound LoadSound(string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return LoadSound(str1.AsPointer());
-    }
-
-    /// <summary>Export wave data to file</summary>
-    public static CBool ExportWave(Wave wave, string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return ExportWave(wave, str1.AsPointer());
-    }
-
-    /// <summary>Export wave sample data to code (.h)</summary>
-    public static CBool ExportWaveAsCode(Wave wave, string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return ExportWaveAsCode(wave, str1.AsPointer());
-    }
-
-    /// <summary>Load music stream from file</summary>
-    public static Music LoadMusicStream(string fileName)
-    {
-        using AnsiBuffer str1 = fileName.ToAnsiBuffer();
-        return LoadMusicStream(str1.AsPointer());
-    }
-
-    /// <summary>
-    /// Load music stream from managed memory, fileType refers to extension: i.e. ".wav"
-    /// </summary>
-    public static Music LoadMusicStreamFromMemory(string fileType, byte[] fileData)
-    {
-        using AnsiBuffer fileTypeNative = fileType.ToAnsiBuffer();
-
-        fixed (byte* fileDataNative = fileData)
-        {
-            Music music = LoadMusicStreamFromMemory(
-                fileTypeNative.AsPointer(),
-                fileDataNative,
-                fileData.Length
-            );
-
-            return music;
-        }
-    }
-
-    /// <summary>
-    /// Attach audio stream processor to the entire audio pipeline
-    /// </summary>
-    public static void AttachAudioMixedProcessor(AudioCallback<float> processor)
-    {
-        if (AudioMixed.Callback == null)
-        {
-            AudioMixed.Callback = processor;
-            AttachAudioMixedProcessor(&AudioMixed.Processor);
-        }
-    }
-
-    /// <summary>
-    /// Detach audio stream processor from the entire audio pipeline
-    /// </summary>
-    public static void DetachAudioMixedProcessor(AudioCallback<float> processor)
-    {
-        if (AudioMixed.Callback == processor)
-        {
-            DetachAudioMixedProcessor(&AudioMixed.Processor);
-            AudioMixed.Callback = null;
-        }
-    }
+    //
+    // /// <summary>Load wave data from file</summary>
+    // public static Wave LoadWave(string fileName)
+    // {
+    //     using AnsiBuffer str1 = fileName.ToAnsiBuffer();
+    //     return LoadWave(str1.AsPointer());
+    // }
+    //
+    // /// <summary>
+    // /// Load wave from managed memory, fileType refers to extension: i.e. ".wav"
+    // /// </summary>
+    // public static Wave LoadWaveFromMemory(string fileType, byte[] fileData)
+    // {
+    //     using AnsiBuffer fileTypeNative = fileType.ToAnsiBuffer();
+    //
+    //     fixed (byte* fileDataNative = fileData)
+    //     {
+    //         Wave wave = LoadWaveFromMemory(
+    //             fileTypeNative.AsPointer(),
+    //             fileDataNative,
+    //             fileData.Length
+    //         );
+    //
+    //         return wave;
+    //     }
+    // }
+    //
+    // /// <summary>Load sound from file</summary>
+    // public static Sound LoadSound(string fileName)
+    // {
+    //     using AnsiBuffer str1 = fileName.ToAnsiBuffer();
+    //     return LoadSound(str1.AsPointer());
+    // }
+    //
+    // /// <summary>Export wave data to file</summary>
+    // public static CBool ExportWave(Wave wave, string fileName)
+    // {
+    //     using AnsiBuffer str1 = fileName.ToAnsiBuffer();
+    //     return ExportWave(wave, str1.AsPointer());
+    // }
+    //
+    // /// <summary>Export wave sample data to code (.h)</summary>
+    // public static CBool ExportWaveAsCode(Wave wave, string fileName)
+    // {
+    //     using AnsiBuffer str1 = fileName.ToAnsiBuffer();
+    //     return ExportWaveAsCode(wave, str1.AsPointer());
+    // }
+    //
+    // /// <summary>Load music stream from file</summary>
+    // public static Music LoadMusicStream(string fileName)
+    // {
+    //     using AnsiBuffer str1 = fileName.ToAnsiBuffer();
+    //     return LoadMusicStream(str1.AsPointer());
+    // }
+    //
+    // /// <summary>
+    // /// Load music stream from managed memory, fileType refers to extension: i.e. ".wav"
+    // /// </summary>
+    // public static Music LoadMusicStreamFromMemory(string fileType, byte[] fileData)
+    // {
+    //     using AnsiBuffer fileTypeNative = fileType.ToAnsiBuffer();
+    //
+    //     fixed (byte* fileDataNative = fileData)
+    //     {
+    //         Music music = LoadMusicStreamFromMemory(
+    //             fileTypeNative.AsPointer(),
+    //             fileDataNative,
+    //             fileData.Length
+    //         );
+    //
+    //         return music;
+    //     }
+    // }
+    //
+    // /// <summary>
+    // /// Attach audio stream processor to the entire audio pipeline
+    // /// </summary>
+    // public static void AttachAudioMixedProcessor(AudioCallback<float> processor)
+    // {
+    //     if (AudioMixed.Callback == null)
+    //     {
+    //         AudioMixed.Callback = processor;
+    //         AttachAudioMixedProcessor(&AudioMixed.Processor);
+    //     }
+    // }
+    //
+    // /// <summary>
+    // /// Detach audio stream processor from the entire audio pipeline
+    // /// </summary>
+    // public static void DetachAudioMixedProcessor(AudioCallback<float> processor)
+    // {
+    //     if (AudioMixed.Callback == processor)
+    //     {
+    //         DetachAudioMixedProcessor(&AudioMixed.Processor);
+    //         AudioMixed.Callback = null;
+    //     }
+    // }
 
     public static string SubText(this string input, int position, int length)
     {
         return input.Substring(position, Math.Min(length, input.Length));
     }
 
-    public static Material GetMaterial(ref Model model, int materialIndex)
+    public static Material GetMaterial(ref NativeModel nativeModel, int materialIndex)
     {
-        return model.Materials[materialIndex];
+        return nativeModel.Materials[materialIndex];
     }
 
-    public static Texture2D GetMaterialTexture(ref Model model, int materialIndex, MaterialMapIndex mapIndex)
+    public static Texture2D GetMaterialTexture(ref NativeModel nativeModel, int materialIndex, MaterialMapIndex mapIndex)
     {
-        return model.Materials[materialIndex].Maps[(int)mapIndex].Texture;
+        return nativeModel.Materials[materialIndex].Maps[(int)mapIndex].Texture;
     }
 
     public static void SetMaterialTexture(
-        ref Model model,
+        ref NativeModel nativeModel,
         int materialIndex,
         MaterialMapIndex mapIndex,
         ref Texture2D texture
     )
     {
-        SetMaterialTexture(&model.Materials[materialIndex], mapIndex, texture);
+        SetMaterialTexture(&nativeModel.Materials[materialIndex], mapIndex, texture);
     }
 
-    public static void SetMaterialShader(ref Model model, int materialIndex, ref Shader shader)
+    public static void SetMaterialShader(ref NativeModel nativeModel, int materialIndex, ref NativeShader nativeShader)
     {
-        model.Materials[materialIndex].Shader = shader;
+        nativeModel.Materials[materialIndex].NativeShader = nativeShader;
     }
 
     /// <summary>Get a ray trace from mouse position</summary>

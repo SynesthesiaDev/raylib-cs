@@ -25,7 +25,7 @@ public unsafe struct BoneInfo
 /// Model type
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct Model
+public unsafe struct NativeModel
 {
     /// <summary>
     /// Local transform matrix
@@ -45,7 +45,7 @@ public unsafe struct Model
     /// <summary>
     /// Meshes array (Mesh *)
     /// </summary>
-    public Mesh* Meshes;
+    public NativeMesh* Meshes;
 
     /// <summary>
     /// Materials array (Material *)
@@ -72,7 +72,7 @@ public unsafe struct Model
     /// <summary>
     /// Bones base transformation (pose, Transform *)
     /// </summary>
-    public Transform* BindPose;
+    public NativeTransform* BindPose;
 }
 
 /// <summary>
@@ -102,7 +102,7 @@ public unsafe struct ModelAnimation
     /// <summary>
     /// Poses array by frame (Transform **)
     /// </summary>
-    public readonly Transform** FramePoses;
+    public readonly NativeTransform** FramePoses;
 
     /// <summary>
     /// Animation name (char[32])
@@ -114,7 +114,7 @@ public unsafe struct ModelAnimation
 
     public readonly struct FramePosesCollection
     {
-        readonly Transform** _framePoses;
+        readonly NativeTransform** _framePoses;
 
         readonly int _frameCount;
 
@@ -122,9 +122,9 @@ public unsafe struct ModelAnimation
 
         public readonly FramePoses this[int index] => new FramePoses(_framePoses[index], _boneCount);
 
-        public readonly Transform this[int index1, int index2] => new FramePoses(_framePoses[index1], _boneCount)[index2];
+        public readonly NativeTransform this[int index1, int index2] => new FramePoses(_framePoses[index1], _boneCount)[index2];
 
-        internal FramePosesCollection(Transform** framePoses, int frameCount, int boneCount)
+        internal FramePosesCollection(NativeTransform** framePoses, int frameCount, int boneCount)
         {
             this._framePoses = framePoses;
             this._frameCount = frameCount;
@@ -135,13 +135,13 @@ public unsafe struct ModelAnimation
 
 public readonly unsafe struct FramePoses
 {
-    readonly Transform* _poses;
+    readonly NativeTransform* _poses;
 
     readonly int _count;
 
-    public readonly ref Transform this[int index] => ref _poses[index];
+    public readonly ref NativeTransform this[int index] => ref _poses[index];
 
-    internal FramePoses(Transform* poses, int count)
+    internal FramePoses(NativeTransform* poses, int count)
     {
         this._poses = poses;
         this._count = count;

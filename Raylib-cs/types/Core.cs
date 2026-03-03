@@ -93,7 +93,7 @@ public enum ConfigFlags : uint
     /// <summary>
     ///  Set to try to initialize the stencil buffer to 8 bits
     /// </summary>
-    FlagStencilBuffer8Bit = 0x00020000
+    StencilBuffer8Bit = 0x00020000
 }
 
 /// <summary>

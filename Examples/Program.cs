@@ -1,11 +1,9 @@
-using System;
 using Examples.Core;
 using Examples.Shapes;
 using Examples.Textures;
 using Examples.Text;
 using Examples.Models;
 using Examples.Shaders;
-using Examples.Audio;
 
 namespace Examples;
 
@@ -33,6 +31,7 @@ public class ExampleList
     public static ExampleInfo[] AllExamples = new[]
     {
         // Core
+        new ExampleInfo("Stencil Test", StencilTest.Main),
         new ExampleInfo("Camera2dPlatformer", Camera2dPlatformer.Main),
         new ExampleInfo("Camera2dDemo", Camera2dDemo.Main),
         new ExampleInfo("Camera3dFirstPerson", Camera3dFirstPerson.Main),
@@ -149,11 +148,6 @@ public class ExampleList
         new ExampleInfo("TextureOutline", TextureOutline.Main),
         new ExampleInfo("TextureWaves", TextureWaves.Main),
         new ExampleInfo("WriteDepth", WriteDepth.Main),
-
-        // Audio
-        new ExampleInfo("ModulePlaying", ModulePlaying.Main),
-        new ExampleInfo("MusicStreamDemo", MusicStreamDemo.Main),
-        new ExampleInfo("SoundLoading", SoundLoading.Main),
     };
 
     public static ExampleInfo GetExample(string name)
@@ -169,7 +163,7 @@ class Program
 {
     static unsafe void Main(string[] args)
     {
-        Raylib.SetTraceLogCallback(&Logging.LogConsole);
+        Raylib.SetTraceLogCallback(&Trace.LogConsole);
 
         if (args.Length > 0)
         {

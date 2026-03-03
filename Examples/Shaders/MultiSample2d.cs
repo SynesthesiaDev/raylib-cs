@@ -39,13 +39,13 @@ public class MultiSample2d
         Texture2D texBlue = LoadTextureFromImage(imBlue);
         UnloadImage(imBlue);
 
-        Shader shader = LoadShader(null, "resources/shaders/glsl330/color_mix.fs");
+        NativeShader nativeShader = LoadShader(null, "resources/shaders/glsl330/color_mix.fs");
 
         // Get an additional sampler2D location to be enabled on drawing
-        int texBlueLoc = GetShaderLocation(shader, "texture1");
+        int texBlueLoc = GetShaderLocation(nativeShader, "texture1");
 
         // Get shader uniform for divider
-        int dividerLoc = GetShaderLocation(shader, "divider");
+        int dividerLoc = GetShaderLocation(nativeShader, "divider");
         float dividerValue = 0.5f;
 
         SetTargetFPS(60);
@@ -74,7 +74,7 @@ public class MultiSample2d
                 dividerValue = 1.0f;
             }
 
-            Raylib.SetShaderValue(shader, dividerLoc, dividerValue, ShaderUniformDataType.Float);
+            Raylib.SetShaderValue(nativeShader, dividerLoc, dividerValue, ShaderUniformDataType.Float);
             //----------------------------------------------------------------------------------
 
             // Draw
@@ -82,12 +82,12 @@ public class MultiSample2d
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
 
             // WARNING: Additional samplers are enabled for all draw calls in the batch,
             // EndShaderMode() forces batch drawing and consequently resets active textures
             // to let other sampler2D to be activated on consequent drawings (if required)
-            SetShaderValueTexture(shader, texBlueLoc, texBlue);
+            SetShaderValueTexture(nativeShader, texBlueLoc, texBlue);
 
             // We are drawing texRed using default sampler2D texture0 but
             // an additional texture units is enabled for texBlue (sampler2D texture1)
@@ -104,7 +104,7 @@ public class MultiSample2d
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
         UnloadTexture(texRed);
         UnloadTexture(texBlue);
 

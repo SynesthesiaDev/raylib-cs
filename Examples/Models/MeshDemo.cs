@@ -23,7 +23,7 @@ public class MeshDemo
         camera.Projection = CameraProjection.Perspective;
 
         // Generate a mesh using utils to allocate/access mesh attribute data
-        Mesh tetrahedron = new(4, 4);
+        NativeMesh tetrahedron = new(4, 4);
         tetrahedron.AllocVertices();
         tetrahedron.AllocTexCoords();
         tetrahedron.AllocColors();
@@ -67,7 +67,7 @@ public class MeshDemo
 
         float rotationAngle = 0f;
         Raylib.UploadMesh(ref tetrahedron, false);
-        Model model = Raylib.LoadModelFromMesh(tetrahedron);
+        NativeModel nativeModel = Raylib.LoadModelFromMesh(tetrahedron);
 
         Image image = Raylib.GenImagePerlinNoise(16, 16, 0, 0, 1000f);
         Raylib.ImageBlurGaussian(ref image, 2);
@@ -76,7 +76,7 @@ public class MeshDemo
         Texture2D texture = Raylib.LoadTextureFromImage(image);
         Raylib.UnloadImage(image);
 
-        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Diffuse, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Diffuse, ref texture);
 
         SetTargetFPS(60);
         //--------------------------------------------------------------------------------------
@@ -96,7 +96,7 @@ public class MeshDemo
             ClearBackground(Color.RayWhite);
 
             BeginMode3D(camera);
-            Raylib.DrawModelEx(model, Vector3.Zero, Vector3.UnitX, rotationAngle, Vector3.One, Color.White);
+            Raylib.DrawModelEx(nativeModel, Vector3.Zero, Vector3.UnitX, rotationAngle, Vector3.One, Color.White);
             EndMode3D();
 
             EndDrawing();
@@ -106,7 +106,7 @@ public class MeshDemo
         // De-Initialization
         //--------------------------------------------------------------------------------------
         UnloadTexture(texture);
-        UnloadModel(model);
+        UnloadModel(nativeModel);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

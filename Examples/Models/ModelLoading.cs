@@ -42,14 +42,14 @@ public class ModelLoading
         camera.FovY = 45.0f;
         camera.Projection = CameraProjection.Perspective;
 
-        Model model = LoadModel("resources/models/obj/castle.obj");
+        NativeModel nativeModel = LoadModel("resources/models/obj/castle.obj");
         Texture2D texture = LoadTexture("resources/models/obj/castle_diffuse.png");
 
         // Set map diffuse texture
-        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Albedo, ref texture);
 
         Vector3 position = new(0.0f, 0.0f, 0.0f);
-        BoundingBox bounds = GetMeshBoundingBox(model.Meshes[0]);
+        BoundingBox bounds = GetMeshBoundingBox(nativeModel.Meshes[0]);
 
         // NOTE: bounds are calculated from the original size of the model,
         // if model is scaled on drawing, bounds must be also scaled
@@ -80,13 +80,13 @@ public class ModelLoading
                         IsFileExtension(droppedFiles[0], ".m3d")
                     )
                     {
-                        UnloadModel(model);
-                        model = LoadModel(droppedFiles[0]);
+                        UnloadModel(nativeModel);
+                        nativeModel = LoadModel(droppedFiles[0]);
 
                         // Set current map diffuse texture
-                        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Albedo, ref texture);
+                        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Albedo, ref texture);
 
-                        bounds = GetMeshBoundingBox(model.Meshes[0]);
+                        bounds = GetMeshBoundingBox(nativeModel.Meshes[0]);
 
                         // TODO: Move camera position from target enough distance to visualize model properly
                     }
@@ -95,7 +95,7 @@ public class ModelLoading
                         // Unload model texture and load new one
                         UnloadTexture(texture);
                         texture = LoadTexture(droppedFiles[0]);
-                        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Albedo, ref texture);
+                        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Albedo, ref texture);
                     }
                 }
             }
@@ -122,7 +122,7 @@ public class ModelLoading
 
             BeginMode3D(camera);
 
-            DrawModel(model, position, 1.0f, Color.White);
+            DrawModel(nativeModel, position, 1.0f, Color.White);
 
             DrawGrid(20, 10.0f);
 
@@ -150,7 +150,7 @@ public class ModelLoading
         // De-Initialization
         //--------------------------------------------------------------------------------------
         UnloadTexture(texture);
-        UnloadModel(model);
+        UnloadModel(nativeModel);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

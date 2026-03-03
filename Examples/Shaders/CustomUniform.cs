@@ -43,21 +43,21 @@ public class CustomUniform
         camera.FovY = 45.0f;
         camera.Projection = CameraProjection.Perspective;
 
-        Model model = LoadModel("resources/models/obj/barracks.obj");
+        NativeModel nativeModel = LoadModel("resources/models/obj/barracks.obj");
         Texture2D texture = LoadTexture("resources/models/obj/barracks_diffuse.png");
 
         // Set model diffuse texture
-        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Albedo, ref texture);
 
         Vector3 position = new(0.0f, 0.0f, 0.0f);
 
         // Load postpro shader
-        Shader shader = LoadShader("resources/shaders/glsl330/base.vs",
+        NativeShader nativeShader = LoadShader("resources/shaders/glsl330/base.vs",
                                    "resources/shaders/glsl330/swirl.fs");
 
         // Get variable (uniform) location on the shader to connect with the program
         // NOTE: If uniform variable could not be found in the shader, function returns -1
-        int swirlCenterLoc = GetShaderLocation(shader, "center");
+        int swirlCenterLoc = GetShaderLocation(nativeShader, "center");
 
         float[] swirlCenter = new float[2] { (float)screenWidth / 2, (float)screenHeight / 2 };
 
@@ -78,7 +78,7 @@ public class CustomUniform
             swirlCenter[1] = screenHeight - mousePosition.Y;
 
             // Send new value to the shader to be used on drawing
-            Raylib.SetShaderValue(shader, swirlCenterLoc, swirlCenter, ShaderUniformDataType.Vec2);
+            Raylib.SetShaderValue(nativeShader, swirlCenterLoc, swirlCenter, ShaderUniformDataType.Vec2);
 
             UpdateCamera(ref camera, CameraMode.Orbital);
             //----------------------------------------------------------------------------------
@@ -94,7 +94,7 @@ public class CustomUniform
 
             BeginMode3D(camera);
 
-            DrawModel(model, position, 0.5f, Color.White);
+            DrawModel(nativeModel, position, 0.5f, Color.White);
             DrawGrid(10, 1.0f);
 
             EndMode3D();
@@ -104,7 +104,7 @@ public class CustomUniform
             // End drawing to texture (now we have a texture available for next passes)
             EndTextureMode();
 
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
 
             // NOTE: Render texture must be y-flipped due to default OpenGL coordinates (left-bottom)
             DrawTextureRec(
@@ -132,9 +132,9 @@ public class CustomUniform
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
         UnloadTexture(texture);
-        UnloadModel(model);
+        UnloadModel(nativeModel);
         UnloadRenderTexture(target);
 
         CloseWindow();

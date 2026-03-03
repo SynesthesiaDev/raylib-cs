@@ -9,9 +9,7 @@
 *
 ********************************************************************************************/
 
-using System;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using static Raylib_cs.Raylib;
 
 namespace Examples.Text;
@@ -35,36 +33,36 @@ public class FontSdf
         byte* fileData = LoadFileData("resources/fonts/anonymous_pro_bold.ttf", ref fileSize);
 
         // Default font generation from TTF font
-        Font fontDefault = new();
-        fontDefault.BaseSize = 16;
-        fontDefault.GlyphCount = 95;
+        NativeFont nativeFontDefault = new();
+        nativeFontDefault.BaseSize = 16;
+        nativeFontDefault.GlyphCount = 95;
 
         // Loading font data from memory data
         // Parameters > font size: 16, no chars array provided (0), chars count: 95 (autogenerate chars array)
-        fontDefault.Glyphs = LoadFontData(fileData, (int)fileSize, 16, null, 95, FontType.Default);
+        nativeFontDefault.Glyphs = LoadFontData(fileData, (int)fileSize, 16, null, 95, FontType.Default);
         // Parameters > chars count: 95, font size: 16, chars padding in image: 4 px, pack method: 0 (default)
-        Image atlas = GenImageFontAtlas(fontDefault.Glyphs, &fontDefault.Recs, 95, 16, 4, 0);
-        fontDefault.Texture = LoadTextureFromImage(atlas);
+        Image atlas = GenImageFontAtlas(nativeFontDefault.Glyphs, &nativeFontDefault.Recs, 95, 16, 4, 0);
+        nativeFontDefault.Texture = LoadTextureFromImage(atlas);
         UnloadImage(atlas);
 
         // SDF font generation from TTF font
-        Font fontSDF = new();
-        fontSDF.BaseSize = 16;
-        fontSDF.GlyphCount = 95;
+        NativeFont nativeFontSdf = new();
+        nativeFontSdf.BaseSize = 16;
+        nativeFontSdf.GlyphCount = 95;
         // Parameters > font size: 16, no chars array provided (0), chars count: 0 (defaults to 95)
-        fontSDF.Glyphs = LoadFontData(fileData, (int)fileSize, 16, null, 0, FontType.Sdf);
+        nativeFontSdf.Glyphs = LoadFontData(fileData, (int)fileSize, 16, null, 0, FontType.Sdf);
         // Parameters > chars count: 95, font size: 16, chars padding in image: 0 px, pack method: 1 (Skyline algorythm)
-        atlas = GenImageFontAtlas(fontSDF.Glyphs, &fontSDF.Recs, 95, 16, 0, 1);
-        fontSDF.Texture = LoadTextureFromImage(atlas);
+        atlas = GenImageFontAtlas(nativeFontSdf.Glyphs, &nativeFontSdf.Recs, 95, 16, 0, 1);
+        nativeFontSdf.Texture = LoadTextureFromImage(atlas);
         UnloadImage(atlas);
 
         // Free memory from loaded file
         UnloadFileData(fileData);
 
         // Load SDF required shader (we use default vertex shader)
-        Shader shader = LoadShader(null, "resources/shaders/glsl330/sdf.fs");
+        NativeShader nativeShader = LoadShader(null, "resources/shaders/glsl330/sdf.fs");
         // Required for SDF font
-        SetTextureFilter(fontSDF.Texture, TextureFilter.Bilinear);
+        SetTextureFilter(nativeFontSdf.Texture, TextureFilter.Bilinear);
 
         Vector2 fontPosition = new(40, screenHeight / 2 - 50);
         Vector2 textSize = new(0.0f);
@@ -98,11 +96,11 @@ public class FontSdf
 
             if (currentFont == 0)
             {
-                textSize = MeasureTextEx(fontDefault, msg, fontSize, 0);
+                textSize = MeasureTextEx(nativeFontDefault, msg, fontSize, 0);
             }
             else
             {
-                textSize = MeasureTextEx(fontSDF, msg, fontSize, 0);
+                textSize = MeasureTextEx(nativeFontSdf, msg, fontSize, 0);
             }
 
             fontPosition.X = GetScreenWidth() / 2 - textSize.X / 2;
@@ -117,16 +115,16 @@ public class FontSdf
             if (currentFont == 1)
             {
                 // NOTE: SDF fonts require a custom SDf shader to compute fragment color
-                BeginShaderMode(shader);
-                DrawTextEx(fontSDF, msg, fontPosition, fontSize, 0, Color.Black);
+                BeginShaderMode(nativeShader);
+                DrawTextEx(nativeFontSdf, msg, fontPosition, fontSize, 0, Color.Black);
                 EndShaderMode();
 
-                DrawTexture(fontSDF.Texture, 10, 10, Color.Black);
+                DrawTexture(nativeFontSdf.Texture, 10, 10, Color.Black);
             }
             else
             {
-                DrawTextEx(fontDefault, msg, fontPosition, fontSize, 0, Color.Black);
-                DrawTexture(fontDefault.Texture, 10, 10, Color.Black);
+                DrawTextEx(nativeFontDefault, msg, fontPosition, fontSize, 0, Color.Black);
+                DrawTexture(nativeFontDefault.Texture, 10, 10, Color.Black);
             }
 
             if (currentFont == 1)
@@ -150,9 +148,9 @@ public class FontSdf
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadFont(fontDefault);
-        UnloadFont(fontSDF);
-        UnloadShader(shader);
+        UnloadFont(nativeFontDefault);
+        UnloadFont(nativeFontSdf);
+        UnloadShader(nativeShader);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

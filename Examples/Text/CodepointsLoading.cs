@@ -12,9 +12,7 @@
 ********************************************************************************************/
 
 using System.Numerics;
-using System.Linq;
 using System.Globalization;
-using System.Collections.Generic;
 using static Raylib_cs.Raylib;
 
 namespace Examples.Text;
@@ -44,7 +42,7 @@ class CodepointsLoading
 
         // Load font containing all the provided codepoint glyphs
         // A texture font atlas is automatically generated
-        Font font = LoadFontEx(
+        NativeFont nativeFont = LoadFontEx(
             "resources/fonts/DotGothic16-Regular.ttf",
             36,
             codepointsNoDuplicates,
@@ -52,7 +50,7 @@ class CodepointsLoading
         );
 
         // Set bilinear scale filter for better font scaling
-        SetTextureFilter(font.Texture, TextureFilter.Bilinear);
+        SetTextureFilter(nativeFont.Texture, TextureFilter.Bilinear);
 
         bool showFontAtlas = false;
 
@@ -89,13 +87,13 @@ class CodepointsLoading
             if (showFontAtlas)
             {
                 // Draw generated font texture atlas containing provided codepoints
-                DrawTexture(font.Texture, 150, 100, Color.Black);
-                DrawRectangleLines(150, 100, font.Texture.Width, font.Texture.Height, Color.Black);
+                DrawTexture(nativeFont.Texture, 150, 100, Color.Black);
+                DrawRectangleLines(150, 100, nativeFont.Texture.Width, nativeFont.Texture.Height, Color.Black);
             }
             else
             {
                 // Draw provided text with laoded font, containing all required codepoint glyphs
-                DrawTextEx(font, text, new Vector2(160, 110), 48, 5, Color.Black);
+                DrawTextEx(nativeFont, text, new Vector2(160, 110), 48, 5, Color.Black);
             }
 
             DrawText("Press SPACE to toggle font atlas view!", 10, GetScreenHeight() - 30, 20, Color.Gray);
@@ -106,7 +104,7 @@ class CodepointsLoading
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadFont(font);
+        UnloadFont(nativeFont);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

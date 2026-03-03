@@ -87,7 +87,7 @@ public class BasicPbr
         var car = LoadModel("resources/models/gltf/old_car_new.glb");
 
         // Assign already setup PBR shader to model.materials[0], used by models.meshes[0]
-        car.Materials[0].Shader = shader;
+        car.Materials[0].NativeShader = shader;
 
         // Setup materials[0].maps default parameters
         car.Materials[0].Maps[(int)MaterialMapIndex.Albedo].Color = Color.White;
@@ -110,7 +110,7 @@ public class BasicPbr
         //Model floor = LoadModelFromMesh(floorMesh);
 
         // Assign material shader for our floor model, same PBR shader
-        floor.Materials[0].Shader = shader;
+        floor.Materials[0].NativeShader = shader;
 
         floor.Materials[0].Maps[(int)MaterialMapIndex.Albedo].Color = Color.White;
         floor.Materials[0].Maps[(int)MaterialMapIndex.Metalness].Value = 0.0f;
@@ -267,12 +267,12 @@ public class BasicPbr
         //--------------------------------------------------------------------------------------
         // Unbind (disconnect) shader from car.material[0]
         // to avoid UnloadMaterial() trying to unload it automatically
-        car.Materials[0].Shader = new();
+        car.Materials[0].NativeShader = new();
         UnloadMaterial(car.Materials[0]);
         car.Materials[0].Maps = null;
         UnloadModel(car);
 
-        floor.Materials[0].Shader = new();
+        floor.Materials[0].NativeShader = new();
         UnloadMaterial(floor.Materials[0]);
         floor.Materials[0].Maps = null;
         UnloadModel(floor);
@@ -285,17 +285,17 @@ public class BasicPbr
         return 0;
     }
 
-    private static void UpdateLight(Shader shader, PbrLight light)
+    private static void UpdateLight(NativeShader nativeShader, PbrLight light)
     {
-        SetShaderValue(shader, light.EnabledLoc, light.Enabled, ShaderUniformDataType.Int);
-        SetShaderValue(shader, light.TypeLoc, light.Type, ShaderUniformDataType.Int);
+        SetShaderValue(nativeShader, light.EnabledLoc, light.Enabled, ShaderUniformDataType.Int);
+        SetShaderValue(nativeShader, light.TypeLoc, light.Type, ShaderUniformDataType.Int);
 
         // Send to shader light position values
-        SetShaderValue(shader, light.PositionLoc, light.Position, ShaderUniformDataType.Vec3);
+        SetShaderValue(nativeShader, light.PositionLoc, light.Position, ShaderUniformDataType.Vec3);
 
         // Send to shader light target position values
-        SetShaderValue(shader, light.TargetLoc, light.Target, ShaderUniformDataType.Vec3);
-        SetShaderValue(shader, light.ColorLoc, light.Color, ShaderUniformDataType.Vec4);
-        SetShaderValue(shader, light.IntensityLoc, light.Intensity, ShaderUniformDataType.Float);
+        SetShaderValue(nativeShader, light.TargetLoc, light.Target, ShaderUniformDataType.Vec3);
+        SetShaderValue(nativeShader, light.ColorLoc, light.Color, ShaderUniformDataType.Vec4);
+        SetShaderValue(nativeShader, light.IntensityLoc, light.Intensity, ShaderUniformDataType.Float);
     }
 }

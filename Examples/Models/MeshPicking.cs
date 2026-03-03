@@ -38,7 +38,7 @@ public class MeshPicking
         // Picking ray
         Ray ray = new();
 
-        Model tower = LoadModel("resources/models/obj/turret.obj");
+        NativeModel tower = LoadModel("resources/models/obj/turret.obj");
         Texture2D texture = LoadTexture("resources/models/obj/turret_diffuse.png");
         Raylib.SetMaterialTexture(ref tower, 0, MaterialMapIndex.Albedo, ref texture);
 

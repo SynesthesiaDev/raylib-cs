@@ -27,12 +27,8 @@ public class SpriteExplosion
         const int screenHeight = 450;
 
         InitWindow(screenWidth, screenHeight, "raylib [textures] example - sprite explosion");
-        InitAudioDevice();
 
         // Load explosion sound
-        Sound fxBoom = LoadSound("resources/audio/boom.wav");
-
-        // Load explosion texture
         Texture2D explosion = LoadTexture("resources/explosion.png");
 
         // Init variables for animation
@@ -69,8 +65,6 @@ public class SpriteExplosion
 
                 position.X -= frameWidth / 2;
                 position.Y -= frameHeight / 2;
-
-                PlaySound(fxBoom);
             }
 
             // Compute explosion animation frames
@@ -120,9 +114,6 @@ public class SpriteExplosion
         // De-Initialization
         //--------------------------------------------------------------------------------------
         UnloadTexture(explosion);
-        UnloadSound(fxBoom);
-
-        CloseAudioDevice();
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

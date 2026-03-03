@@ -9,7 +9,6 @@
 *
 ********************************************************************************************/
 
-using System;
 using System.Numerics;
 using static Raylib_cs.Raylib;
 
@@ -59,7 +58,7 @@ public class VrSimulator
         VrStereoConfig config = LoadVrStereoConfig(device);
 
         // Distortion shader (uses device lens distortion and chroma)
-        Shader distortion = LoadShader(null, "resources/distortion330.fs");
+        NativeShader distortion = LoadShader(null, "resources/distortion330.fs");
 
         // Update distortion shader with lens and distortion-scale parameters
         Raylib.SetShaderValue(

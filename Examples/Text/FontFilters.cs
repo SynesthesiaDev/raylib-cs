@@ -34,18 +34,18 @@ public class FontFilters
         // NOTE: Textures/Fonts MUST be loaded after Window initialization (OpenGL context is required)
 
         // TTF Font loading with custom generation parameters
-        Font font = LoadFontEx("resources/fonts/KAISG.ttf", 96, null, 0);
+        NativeFont nativeFont = LoadFontEx("resources/fonts/KAISG.ttf", 96, null, 0);
 
         // Generate mipmap levels to use trilinear filtering
         // NOTE: On 2D drawing it won't be noticeable, it looks like TEXTURE_FILTER_BILINEAR
-        GenTextureMipmaps(ref font.Texture);
+        GenTextureMipmaps(ref nativeFont.Texture);
 
-        float fontSize = font.BaseSize;
+        float fontSize = nativeFont.BaseSize;
         Vector2 fontPosition = new(40, screenHeight / 2 - 80);
         Vector2 textSize = new(0.0f, 0.0f);
 
         // Setup texture scaling filter
-        SetTextureFilter(font.Texture, TextureFilter.Point);
+        SetTextureFilter(nativeFont.Texture, TextureFilter.Point);
         TextureFilter currentFontFilter = TextureFilter.Point;
 
         SetTargetFPS(60);
@@ -61,22 +61,22 @@ public class FontFilters
             // Choose font texture filter method
             if (IsKeyPressed(KeyboardKey.One))
             {
-                SetTextureFilter(font.Texture, TextureFilter.Point);
+                SetTextureFilter(nativeFont.Texture, TextureFilter.Point);
                 currentFontFilter = TextureFilter.Point;
             }
             else if (IsKeyPressed(KeyboardKey.Two))
             {
-                SetTextureFilter(font.Texture, TextureFilter.Bilinear);
+                SetTextureFilter(nativeFont.Texture, TextureFilter.Bilinear);
                 currentFontFilter = TextureFilter.Bilinear;
             }
             else if (IsKeyPressed(KeyboardKey.Three))
             {
                 // NOTE: Trilinear filter won't be noticed on 2D drawing
-                SetTextureFilter(font.Texture, TextureFilter.Trilinear);
+                SetTextureFilter(nativeFont.Texture, TextureFilter.Trilinear);
                 currentFontFilter = TextureFilter.Trilinear;
             }
 
-            textSize = MeasureTextEx(font, msg, fontSize, 0);
+            textSize = MeasureTextEx(nativeFont, msg, fontSize, 0);
 
             if (IsKeyDown(KeyboardKey.Left))
             {
@@ -95,8 +95,8 @@ public class FontFilters
                 // NOTE: We only support first ttf file dropped
                 if (IsFileExtension(files[0], ".ttf"))
                 {
-                    UnloadFont(font);
-                    font = LoadFontEx(files[0], (int)fontSize, null, 0);
+                    UnloadFont(nativeFont);
+                    nativeFont = LoadFontEx(files[0], (int)fontSize, null, 0);
                 }
             }
             //----------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ public class FontFilters
             DrawText("Use 1, 2, 3 to change texture filter", 20, 60, 10, Color.Gray);
             DrawText("Drop a new TTF font for dynamic loading", 20, 80, 10, Color.DarkGray);
 
-            DrawTextEx(font, msg, fontPosition, fontSize, 0, Color.Black);
+            DrawTextEx(nativeFont, msg, fontPosition, fontSize, 0, Color.Black);
 
             DrawRectangle(0, screenHeight - 80, screenWidth, 80, Color.LightGray);
             DrawText("CURRENT TEXTURE FILTER:", 250, 400, 20, Color.Gray);
@@ -135,7 +135,7 @@ public class FontFilters
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadFont(font);
+        UnloadFont(nativeFont);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

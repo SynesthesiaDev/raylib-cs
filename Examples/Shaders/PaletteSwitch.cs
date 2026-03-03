@@ -82,11 +82,11 @@ public class PaletteSwitch
         // Load shader to be used on some parts drawing
         // NOTE 1: Using GLSL 330 shader version, on OpenGL ES 2.0 use GLSL 100 shader version
         // NOTE 2: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-        Shader shader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/palette_switch.fs");
+        NativeShader nativeShader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/palette_switch.fs");
 
         // Get variable (uniform) location on the shader to connect with the program
         // NOTE: If uniform variable could not be found in the shader, function returns -1
-        int paletteLoc = GetShaderLocation(shader, "palette");
+        int paletteLoc = GetShaderLocation(nativeShader, "palette");
 
         int currentPalette = 0;
         int lineHeight = screenHeight / ColorsPerPalette;
@@ -120,7 +120,7 @@ public class PaletteSwitch
             // Send new value to the shader to be used on drawing.
             // NOTE: We are sending RGB triplets w/o the alpha channel
             Raylib.SetShaderValueV(
-                shader,
+                nativeShader,
                 paletteLoc,
                 Palettes[currentPalette],
                 ShaderUniformDataType.IVec3,
@@ -133,7 +133,7 @@ public class PaletteSwitch
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
 
             for (int i = 0; i < ColorsPerPalette; i++)
             {
@@ -156,7 +156,7 @@ public class PaletteSwitch
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

@@ -38,7 +38,7 @@ public class RectangleBounds
 
         Vector2 lastMouse = new(0.0f, 0.0f);
         Color borderColor = Color.Maroon;
-        Font font = GetFontDefault();
+        NativeFont nativeFont = GetFontDefault();
 
         SetTargetFPS(60);
         //--------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ public class RectangleBounds
 
             // Draw text in container (add some padding)
             DrawTextBoxed(
-                font,
+                nativeFont,
                 text,
                 new Rectangle(container.X + 4, container.Y + 4, container.Width - 4, container.Height - 4),
                 20.0f,
@@ -148,7 +148,7 @@ public class RectangleBounds
 
     // Draw text using font inside rectangle limits
     static void DrawTextBoxed(
-        Font font,
+        NativeFont nativeFont,
         string text,
         Rectangle rec,
         float fontSize,
@@ -157,12 +157,12 @@ public class RectangleBounds
         Color tint
     )
     {
-        DrawTextBoxedSelectable(font, text, rec, fontSize, spacing, wordWrap, tint, 0, 0, Color.White, Color.White);
+        DrawTextBoxedSelectable(nativeFont, text, rec, fontSize, spacing, wordWrap, tint, 0, 0, Color.White, Color.White);
     }
 
     // Draw text using font inside rectangle limits with support for text selection
     static unsafe void DrawTextBoxedSelectable(
-        Font font,
+        NativeFont nativeFont,
         string text,
         Rectangle rec,
         float fontSize,
@@ -184,7 +184,7 @@ public class RectangleBounds
         float textOffsetX = 0.0f;
 
         // Character rectangle scaling factor
-        float scaleFactor = fontSize / (float)font.BaseSize;
+        float scaleFactor = fontSize / (float)nativeFont.BaseSize;
 
         // Word/character wrapping mechanism variables
         bool shouldMeasure = wordWrap;
@@ -205,7 +205,7 @@ public class RectangleBounds
             // Get next codepoint from byte string and glyph index in font
             int codepointByteCount = 0;
             int codepoint = GetCodepoint(&textNative.AsPointer()[i], &codepointByteCount);
-            int index = GetGlyphIndex(font, codepoint);
+            int index = GetGlyphIndex(nativeFont, codepoint);
 
             // NOTE: Normally we exit the decoding sequence as soon as a bad byte is found (and return 0x3f)
             // but we need to draw all of the bad bytes using the '?' symbol moving one byte
@@ -219,9 +219,9 @@ public class RectangleBounds
             float glyphWidth = 0;
             if (codepoint != '\n')
             {
-                glyphWidth = (font.Glyphs[index].AdvanceX == 0) ?
-                    font.Recs[index].Width * scaleFactor :
-                    font.Glyphs[index].AdvanceX * scaleFactor;
+                glyphWidth = (nativeFont.Glyphs[index].AdvanceX == 0) ?
+                    nativeFont.Recs[index].Width * scaleFactor :
+                    nativeFont.Glyphs[index].AdvanceX * scaleFactor;
 
                 if (i + 1 < length)
                 {
@@ -286,7 +286,7 @@ public class RectangleBounds
                 {
                     if (!wordWrap)
                     {
-                        textOffsetY += (font.BaseSize + font.BaseSize / 2) * scaleFactor;
+                        textOffsetY += (nativeFont.BaseSize + nativeFont.BaseSize / 2) * scaleFactor;
                         textOffsetX = 0;
                     }
                 }
@@ -294,12 +294,12 @@ public class RectangleBounds
                 {
                     if (!wordWrap && ((textOffsetX + glyphWidth) > rec.Width))
                     {
-                        textOffsetY += (font.BaseSize + font.BaseSize / 2) * scaleFactor;
+                        textOffsetY += (nativeFont.BaseSize + nativeFont.BaseSize / 2) * scaleFactor;
                         textOffsetX = 0;
                     }
 
                     // When text overflows rectangle height limit, just stop drawing
-                    if ((textOffsetY + font.BaseSize * scaleFactor) > rec.Height)
+                    if ((textOffsetY + nativeFont.BaseSize * scaleFactor) > rec.Height)
                     {
                         break;
                     }
@@ -313,7 +313,7 @@ public class RectangleBounds
                                 rec.X + textOffsetX - 1,
                                 rec.Y + textOffsetY,
                                 glyphWidth,
-                                (float)font.BaseSize * scaleFactor
+                                (float)nativeFont.BaseSize * scaleFactor
                             ),
                             selectBackTint
                         );
@@ -324,7 +324,7 @@ public class RectangleBounds
                     if ((codepoint != ' ') && (codepoint != '\t'))
                     {
                         DrawTextCodepoint(
-                            font,
+                            nativeFont,
                             codepoint,
                             new Vector2(rec.X + textOffsetX, rec.Y + textOffsetY),
                             fontSize,
@@ -335,7 +335,7 @@ public class RectangleBounds
 
                 if (wordWrap && (i == endLine))
                 {
-                    textOffsetY += (font.BaseSize + font.BaseSize / 2) * scaleFactor;
+                    textOffsetY += (nativeFont.BaseSize + nativeFont.BaseSize / 2) * scaleFactor;
                     textOffsetX = 0;
                     startLine = endLine;
                     endLine = -1;

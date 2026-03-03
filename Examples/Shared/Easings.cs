@@ -1,5 +1,3 @@
-using System;
-
 namespace Examples.Shared;
 
 public static class Easings

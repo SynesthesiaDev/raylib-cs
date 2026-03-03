@@ -32,7 +32,7 @@ public class WriteDepth
         InitWindow(screenWidth, screenHeight, "raylib [shaders] example - write depth buffer");
 
         // The shader inverts the depth buffer by writing into it by `gl_FragDepth = 1 - gl_FragCoord.z;`
-        Shader shader = LoadShader(null, $"resources/shaders/glsl{GLSL_VERSION}/write_depth.fs");
+        NativeShader nativeShader = LoadShader(null, $"resources/shaders/glsl{GLSL_VERSION}/write_depth.fs");
 
         // Use customized function to create writable depth texture buffer
         RenderTexture2D target = LoadRenderTextureDepthTex(screenWidth, screenHeight);
@@ -64,7 +64,7 @@ public class WriteDepth
             ClearBackground(Color.White);
 
             BeginMode3D(camera);
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
 
             DrawCubeWiresV(new Vector3(0.0f, 0.5f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), Color.Red);
             DrawCubeV(new Vector3(0.0f, 0.5f, 1.0f), new Vector3(1.0f, 1.0f, 1.0f), Color.Purple);
@@ -95,7 +95,7 @@ public class WriteDepth
         // De-Initialization
         //--------------------------------------------------------------------------------------
         UnloadRenderTextureDepthTex(target);
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

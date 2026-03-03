@@ -31,7 +31,7 @@ public class TextureOutline
         InitWindow(screenWidth, screenHeight, "raylib [shaders] example - Apply an outline to a texture");
 
         Texture2D texture = LoadTexture("resources/fudesumi.png");
-        Shader shdrOutline = LoadShader(null, $"resources/shaders/glsl{GLSL_VERSION}/outline.fs");
+        NativeShader shdrOutline = LoadShader(null, $"resources/shaders/glsl{GLSL_VERSION}/outline.fs");
 
         float outlineSize = 2.0f;
 

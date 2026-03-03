@@ -27,7 +27,6 @@
 *
 ********************************************************************************************/
 
-using System;
 using System.Numerics;
 using static Raylib_cs.Raylib;
 
@@ -91,7 +90,7 @@ public class Spotlight
         int frameCounter = 0;
 
         // Use default vert shader
-        Shader shdrSpot = LoadShader(null, "resources/shaders/glsl330/spotlight.fs");
+        NativeShader shdrSpot = LoadShader(null, "resources/shaders/glsl330/spotlight.fs");
 
         // Get the locations of spots in the shader
         Spot[] spots = new Spot[MaxSpots];

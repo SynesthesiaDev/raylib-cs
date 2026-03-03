@@ -34,14 +34,14 @@ public class SkyboxDemo
         camera.Projection = CameraProjection.Perspective;
 
         // Load skybox model
-        Mesh cube = GenMeshCube(1.0f, 1.0f, 1.0f);
-        Model skybox = LoadModelFromMesh(cube);
+        NativeMesh cube = GenMeshCube(1.0f, 1.0f, 1.0f);
+        NativeModel skybox = LoadModelFromMesh(cube);
 
         bool useHdr = true;
 
         // Load skybox shader and set required locations
         // NOTE: Some locations are automatically set at shader loading
-        Shader shdrSkybox = LoadShader("resources/shaders/glsl330/skybox.vs", "resources/shaders/glsl330/skybox.fs");
+        NativeShader shdrSkybox = LoadShader("resources/shaders/glsl330/skybox.vs", "resources/shaders/glsl330/skybox.fs");
 
         Raylib.SetShaderValue(
             shdrSkybox,
@@ -67,7 +67,7 @@ public class SkyboxDemo
         Raylib.SetMaterialShader(ref skybox, 0, ref shdrSkybox);
 
         // Load cubemap shader and setup required shader locations
-        Shader shdrCubemap = LoadShader(
+        NativeShader shdrCubemap = LoadShader(
             "resources/shaders/glsl330/cubemap.vs",
             "resources/shaders/glsl330/cubemap.fs"
         );
@@ -194,7 +194,7 @@ public class SkyboxDemo
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(Raylib.GetMaterial(ref skybox, 0).Shader);
+        UnloadShader(Raylib.GetMaterial(ref skybox, 0).NativeShader);
         UnloadTexture(Raylib.GetMaterialTexture(ref skybox, 0, MaterialMapIndex.Cubemap));
 
         UnloadModel(skybox);
@@ -206,7 +206,7 @@ public class SkyboxDemo
     }
 
     // Generate cubemap texture from HDR texture
-    private static unsafe Texture2D GenTextureCubemap(Shader shader, Texture2D panorama, int size, PixelFormat format)
+    private static unsafe Texture2D GenTextureCubemap(NativeShader nativeShader, Texture2D panorama, int size, PixelFormat format)
     {
         Texture2D cubemap;
 
@@ -244,7 +244,7 @@ public class SkyboxDemo
         // STEP 2: Draw to framebuffer
         //------------------------------------------------------------------------------------------
         // NOTE: Shader is used to convert HDR equirectangular environment map to cubemap equivalent (6 faces)
-        Rlgl.EnableShader(shader.Id);
+        Rlgl.EnableShader(nativeShader.Id);
 
         // Define projection matrix and send it to shader
         Matrix4x4 matFboProjection = Raymath.MatrixPerspective(
@@ -253,7 +253,7 @@ public class SkyboxDemo
             Rlgl.CULL_DISTANCE_NEAR,
             Rlgl.CULL_DISTANCE_FAR
         );
-        Rlgl.SetUniformMatrix(shader.Locs[(int)ShaderLocationIndex.MatrixProjection], matFboProjection);
+        Rlgl.SetUniformMatrix(nativeShader.Locs[(int)ShaderLocationIndex.MatrixProjection], matFboProjection);
 
         // Define view matrix for every side of the cubemap
         Matrix4x4[] fboViews = new[]
@@ -276,7 +276,7 @@ public class SkyboxDemo
         for (int i = 0; i < 6; i++)
         {
             // Set the view matrix for the current cube face
-            Rlgl.SetUniformMatrix(shader.Locs[(int)ShaderLocationIndex.MatrixView], fboViews[i]);
+            Rlgl.SetUniformMatrix(nativeShader.Locs[(int)ShaderLocationIndex.MatrixView], fboViews[i]);
 
             // Select the current cubemap face attachment for the fbo
             // WARNING: This function by default enables->attach->disables fbo!!!

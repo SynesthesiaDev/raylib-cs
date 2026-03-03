@@ -33,15 +33,15 @@ public class HotReloading
 
         // Load raymarching shader
         // NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-        Shader shader = LoadShader(null, fragShaderFileName);
+        NativeShader nativeShader = LoadShader(null, fragShaderFileName);
 
         // Get shader locations for required uniforms
-        int resolutionLoc = GetShaderLocation(shader, "resolution");
-        int mouseLoc = GetShaderLocation(shader, "mouse");
-        int timeLoc = GetShaderLocation(shader, "time");
+        int resolutionLoc = GetShaderLocation(nativeShader, "resolution");
+        int mouseLoc = GetShaderLocation(nativeShader, "mouse");
+        int timeLoc = GetShaderLocation(nativeShader, "time");
 
         float[] resolution = new[] { (float)screenWidth, (float)screenHeight };
-        Raylib.SetShaderValue(shader, resolutionLoc, resolution, ShaderUniformDataType.Vec2);
+        Raylib.SetShaderValue(nativeShader, resolutionLoc, resolution, ShaderUniformDataType.Vec2);
 
         float totalTime = 0.0f;
         bool shaderAutoReloading = false;
@@ -59,8 +59,8 @@ public class HotReloading
             float[] mousePos = new[] { mouse.X, mouse.Y };
 
             // Set shader required uniform values
-            Raylib.SetShaderValue(shader, timeLoc, totalTime, ShaderUniformDataType.Float);
-            Raylib.SetShaderValue(shader, mouseLoc, mousePos, ShaderUniformDataType.Vec2);
+            Raylib.SetShaderValue(nativeShader, timeLoc, totalTime, ShaderUniformDataType.Float);
+            Raylib.SetShaderValue(nativeShader, mouseLoc, mousePos, ShaderUniformDataType.Vec2);
 
             // Hot shader reloading
             if (shaderAutoReloading || (IsMouseButtonPressed(MouseButton.Left)))
@@ -71,22 +71,22 @@ public class HotReloading
                 if (currentFragShaderModTime != fragShaderFileModTime)
                 {
                     // Try reloading updated shader
-                    Shader updatedShader = LoadShader(null, fragShaderFileName);
+                    NativeShader updatedNativeShader = LoadShader(null, fragShaderFileName);
 
                     // It was correctly loaded
-                    if (updatedShader.Id != 0) //rlGetShaderIdDefault())
+                    if (updatedNativeShader.Id != 0) //rlGetShaderIdDefault())
                     {
-                        UnloadShader(shader);
-                        shader = updatedShader;
+                        UnloadShader(nativeShader);
+                        nativeShader = updatedNativeShader;
 
                         // Get shader locations for required uniforms
-                        resolutionLoc = GetShaderLocation(shader, "resolution");
-                        mouseLoc = GetShaderLocation(shader, "mouse");
-                        timeLoc = GetShaderLocation(shader, "time");
+                        resolutionLoc = GetShaderLocation(nativeShader, "resolution");
+                        mouseLoc = GetShaderLocation(nativeShader, "mouse");
+                        timeLoc = GetShaderLocation(nativeShader, "time");
 
                         // Reset required uniforms
                         Raylib.SetShaderValue(
-                            shader,
+                            nativeShader,
                             resolutionLoc,
                             resolution,
                             ShaderUniformDataType.Vec2
@@ -109,7 +109,7 @@ public class HotReloading
             ClearBackground(Color.RayWhite);
 
             // We only draw a white full-screen rectangle, frame is generated in shader
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
             DrawRectangle(0, 0, screenWidth, screenHeight, Color.White);
             EndShaderMode();
 
@@ -128,7 +128,7 @@ public class HotReloading
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

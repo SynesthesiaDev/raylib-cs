@@ -1370,11 +1370,6 @@ int InitPlatform(void)
         TRACELOG(LOG_INFO, "DISPLAY: Trying to enable MSAA x4");
         glfwWindowHint(GLFW_SAMPLES, 4);   // Tries to enable multisampling x4 (MSAA), default is 0
     }
-    
-    if (CORE.Window.flags & FLAG_STENCIL_BUFFER_8_BIT)
-    {
-        glfwWindowHint(GLFW_STENCIL_BITS, 8);
-    }
 
     // NOTE: When asking for an OpenGL context version, most drivers provide the highest supported version
     // with backward compatibility to older OpenGL versions.
@@ -1492,6 +1487,13 @@ int InitPlatform(void)
         // Modified global variables: CORE.Window.screen.width/CORE.Window.screen.height - CORE.Window.render.width/CORE.Window.render.height - CORE.Window.renderOffset.x/CORE.Window.renderOffset.y - CORE.Window.screenScale
         // TODO: It is a quite cumbersome solution to display size vs requested size, it should be reviewed or removed...
         // HighDPI monitors are properly considered in a following similar function: SetupViewport()
+        
+        if (CORE.Window.flags & FLAG_STENCIL_BUFFER_8_BIT)
+        {
+            glfwWindowHint(GLFW_STENCIL_BITS, 8);
+            TRACELOG(LOG_INFO, "Stencil bits set to 8");
+        }
+        
         SetupFramebuffer(CORE.Window.display.width, CORE.Window.display.height);
 
         platform.handle = glfwCreateWindow(CORE.Window.display.width, CORE.Window.display.height, (CORE.Window.title != 0)? CORE.Window.title : " ", monitor, NULL);
@@ -1508,6 +1510,12 @@ int InitPlatform(void)
         int creationWidth = CORE.Window.screen.width != 0 ? CORE.Window.screen.width : 1;
         int creationHeight = CORE.Window.screen.height != 0 ? CORE.Window.screen.height : 1;
 
+        if (CORE.Window.flags & FLAG_STENCIL_BUFFER_8_BIT)
+        {
+            TRACELOG(LOG_INFO, "Stencil bits set to 8");
+            glfwWindowHint(GLFW_STENCIL_BITS, 8);
+        }
+        
         platform.handle = glfwCreateWindow(creationWidth, creationHeight, (CORE.Window.title != 0)? CORE.Window.title : " ", NULL, NULL);
 
         // After the window was created, determine the monitor that the window manager assigned.

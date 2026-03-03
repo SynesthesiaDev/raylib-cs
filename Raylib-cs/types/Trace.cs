@@ -40,7 +40,7 @@ internal struct VaListLinuxX64
 /// <summary>
 /// Logging workaround for formatting strings from native code
 /// </summary>
-public static unsafe class Logging
+public static unsafe class Trace
 {
     [UnmanagedCallersOnly(CallConvs = new Type[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
     public static unsafe void LogConsole(int msgType, sbyte* text, sbyte* args)

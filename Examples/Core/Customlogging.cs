@@ -11,7 +11,6 @@
 *
 ********************************************************************************************/
 
-using System;
 using System.Runtime.InteropServices;
 using static Raylib_cs.Raylib;
 
@@ -22,7 +21,7 @@ public unsafe class CustomLogging
     [UnmanagedCallersOnly(CallConvs = new[] { typeof(System.Runtime.CompilerServices.CallConvCdecl) })]
     private static void LogCustom(int logLevel, sbyte* text, sbyte* args)
     {
-        var message = Logging.GetLogMessage(new IntPtr(text), new IntPtr(args));
+        var message = Trace.GetLogMessage(new IntPtr(text), new IntPtr(args));
 
         /*Console.ForegroundColor = (TraceLogLevel)logLevel switch
         {
@@ -79,7 +78,7 @@ public unsafe class CustomLogging
         // De-Initialization
         //--------------------------------------------------------------------------------------
         CloseWindow();
-        Raylib.SetTraceLogCallback(&Logging.LogConsole);
+        Raylib.SetTraceLogCallback(&Trace.LogConsole);
         //--------------------------------------------------------------------------------------
 
         return 0;

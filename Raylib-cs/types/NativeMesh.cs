@@ -9,12 +9,12 @@ namespace Raylib_cs;
 /// NOTE: Data stored in CPU memory (and GPU)
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public unsafe struct Mesh
+public unsafe struct NativeMesh
 {
     /// <summary>
     ///  Creates a mesh ready for default vertex data allocation
     /// </summary>
-    public Mesh(int vertexCount, int triangleCount)
+    public NativeMesh(int vertexCount, int triangleCount)
     {
         VertexCount = vertexCount;
         TriangleCount = triangleCount;

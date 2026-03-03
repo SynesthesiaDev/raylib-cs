@@ -46,7 +46,7 @@ public class JuliaSet
 
         // Load julia set shader
         // NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-        Shader shader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/julia_set.fs");
+        NativeShader nativeShader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/julia_set.fs");
 
         // c constant to use in z^2 + c
         float[] c = { PointsOfInterest[0][0], PointsOfInterest[0][1] };
@@ -59,22 +59,22 @@ public class JuliaSet
 
         // Get variable (uniform) locations on the shader to connect with the program
         // NOTE: If uniform variable could not be found in the shader, function returns -1
-        int cLoc = GetShaderLocation(shader, "c");
-        int zoomLoc = GetShaderLocation(shader, "zoom");
-        int offsetLoc = GetShaderLocation(shader, "offset");
+        int cLoc = GetShaderLocation(nativeShader, "c");
+        int zoomLoc = GetShaderLocation(nativeShader, "zoom");
+        int offsetLoc = GetShaderLocation(nativeShader, "offset");
 
         // Tell the shader what the screen dimensions, zoom, offset and c are
         float[] screenDims = { (float)screenWidth, (float)screenHeight };
         Raylib.SetShaderValue(
-            shader,
-            GetShaderLocation(shader, "screenDims"),
+            nativeShader,
+            GetShaderLocation(nativeShader, "screenDims"),
             screenDims,
             ShaderUniformDataType.Vec2
         );
 
-        Raylib.SetShaderValue(shader, cLoc, c, ShaderUniformDataType.Vec2);
-        Raylib.SetShaderValue(shader, zoomLoc, zoomLoc, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(shader, offsetLoc, offset, ShaderUniformDataType.Vec2);
+        Raylib.SetShaderValue(nativeShader, cLoc, c, ShaderUniformDataType.Vec2);
+        Raylib.SetShaderValue(nativeShader, zoomLoc, zoomLoc, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(nativeShader, offsetLoc, offset, ShaderUniformDataType.Vec2);
 
         // Create a RenderTexture2D to be used for render to texture
         RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);
@@ -133,7 +133,7 @@ public class JuliaSet
                     c[0] = PointsOfInterest[5][0];
                     c[1] = PointsOfInterest[5][1];
                 }
-                Raylib.SetShaderValue(shader, cLoc, c, ShaderUniformDataType.Vec2);
+                Raylib.SetShaderValue(nativeShader, cLoc, c, ShaderUniformDataType.Vec2);
             }
 
             // Pause animation (c change)
@@ -187,15 +187,15 @@ public class JuliaSet
                     offsetSpeed = new Vector2(0.0f, 0.0f);
                 }
 
-                Raylib.SetShaderValue(shader, zoomLoc, zoom, ShaderUniformDataType.Float);
-                Raylib.SetShaderValue(shader, offsetLoc, offset, ShaderUniformDataType.Vec2);
+                Raylib.SetShaderValue(nativeShader, zoomLoc, zoom, ShaderUniformDataType.Float);
+                Raylib.SetShaderValue(nativeShader, offsetLoc, offset, ShaderUniformDataType.Vec2);
 
                 // Increment c value with time
                 float amount = GetFrameTime() * incrementSpeed * 0.0005f;
                 c[0] += amount;
                 c[1] += amount;
 
-                Raylib.SetShaderValue(shader, cLoc, c, ShaderUniformDataType.Vec2);
+                Raylib.SetShaderValue(nativeShader, cLoc, c, ShaderUniformDataType.Vec2);
             }
             //----------------------------------------------------------------------------------
 
@@ -218,7 +218,7 @@ public class JuliaSet
 
             // Draw the saved texture and rendered julia set with shader
             // NOTE: We do not invert texture on Y, already considered inside shader
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
             DrawTexture(target.Texture, 0, 0, Color.White);
             EndShaderMode();
 
@@ -237,7 +237,7 @@ public class JuliaSet
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
         UnloadRenderTexture(target);
 
         CloseWindow();

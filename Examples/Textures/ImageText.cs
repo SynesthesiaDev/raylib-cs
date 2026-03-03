@@ -26,17 +26,17 @@ public class ImageText
         InitWindow(screenWidth, screenHeight, "raylib [texture] example - image text drawing");
 
         // TTF Font loading with custom generation parameters
-        Font font = LoadFontEx("resources/fonts/KAISG.ttf", 64, null, 95);
+        NativeFont nativeFont = LoadFontEx("resources/fonts/KAISG.ttf", 64, null, 95);
 
         Image parrots = LoadImage("resources/parrots.png");
 
         // Draw over image using custom font
         ImageDrawTextEx(
             ref parrots,
-            font,
+            nativeFont,
             "[Parrots font drawing]",
             new Vector2(20, 20),
-            font.BaseSize,
+            nativeFont.BaseSize,
             0,
             Color.White
         );
@@ -82,11 +82,11 @@ public class ImageText
 
                 // Draw text directly using sprite font
                 Vector2 textPosition = new(position.X + 20, position.Y + 20 + 280);
-                DrawTextEx(font, "[Parrots font drawing]", textPosition, font.BaseSize, 0, Color.White);
+                DrawTextEx(nativeFont, "[Parrots font drawing]", textPosition, nativeFont.BaseSize, 0, Color.White);
             }
             else
             {
-                DrawTexture(font.Texture, screenWidth / 2 - font.Texture.Width / 2, 50, Color.Black);
+                DrawTexture(nativeFont.Texture, screenWidth / 2 - nativeFont.Texture.Width / 2, 50, Color.Black);
             }
 
             DrawText("PRESS SPACE to SEE USED SPRITEFONT ", 290, 420, 10, Color.DarkGray);
@@ -98,7 +98,7 @@ public class ImageText
         // De-Initialization
         //--------------------------------------------------------------------------------------
         UnloadTexture(texture);
-        UnloadFont(font);
+        UnloadFont(nativeFont);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

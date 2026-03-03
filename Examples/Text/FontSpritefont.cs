@@ -39,9 +39,9 @@ public class FontSpritefont
         string msg3 = "...and a THIRD one! GREAT! :D";
 
         // NOTE: Textures/Fonts MUST be loaded after Window initialization (OpenGL context is required)
-        Font font1 = LoadFont("resources/fonts/custom_mecha.png");
-        Font font2 = LoadFont("resources/fonts/custom_alagard.png");
-        Font font3 = LoadFont("resources/fonts/custom_jupiter_crash.png");
+        NativeFont font1 = LoadFont("resources/fonts/custom_mecha.png");
+        NativeFont font2 = LoadFont("resources/fonts/custom_alagard.png");
+        NativeFont font3 = LoadFont("resources/fonts/custom_jupiter_crash.png");
 
         Vector2 fontPosition1 = new(
             screenWidth / 2 - MeasureTextEx(font1, msg1, font1.BaseSize, -3).X / 2,

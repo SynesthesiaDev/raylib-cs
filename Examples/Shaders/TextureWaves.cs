@@ -39,15 +39,15 @@ public class TextureWaves
         Texture2D texture = LoadTexture("resources/space.png");
 
         // Load shader and setup location points and values
-        Shader shader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/wave.fs");
+        NativeShader nativeShader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/wave.fs");
 
-        int secondsLoc = GetShaderLocation(shader, "secondes");
-        int freqXLoc = GetShaderLocation(shader, "freqX");
-        int freqYLoc = GetShaderLocation(shader, "freqY");
-        int ampXLoc = GetShaderLocation(shader, "ampX");
-        int ampYLoc = GetShaderLocation(shader, "ampY");
-        int speedXLoc = GetShaderLocation(shader, "speedX");
-        int speedYLoc = GetShaderLocation(shader, "speedY");
+        int secondsLoc = GetShaderLocation(nativeShader, "secondes");
+        int freqXLoc = GetShaderLocation(nativeShader, "freqX");
+        int freqYLoc = GetShaderLocation(nativeShader, "freqY");
+        int ampXLoc = GetShaderLocation(nativeShader, "ampX");
+        int ampYLoc = GetShaderLocation(nativeShader, "ampY");
+        int speedXLoc = GetShaderLocation(nativeShader, "speedX");
+        int speedYLoc = GetShaderLocation(nativeShader, "speedY");
 
         // Shader uniform values that can be updated at any time
         float freqX = 25.0f;
@@ -59,17 +59,17 @@ public class TextureWaves
 
         float[] screenSize = { (float)GetScreenWidth(), (float)GetScreenHeight() };
         Raylib.SetShaderValue(
-            shader,
-            GetShaderLocation(shader, "size"),
+            nativeShader,
+            GetShaderLocation(nativeShader, "size"),
             screenSize,
             ShaderUniformDataType.Vec2
         );
-        Raylib.SetShaderValue(shader, freqXLoc, freqX, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(shader, freqYLoc, freqY, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(shader, ampXLoc, ampX, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(shader, ampYLoc, ampY, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(shader, speedXLoc, speedX, ShaderUniformDataType.Float);
-        Raylib.SetShaderValue(shader, speedYLoc, speedY, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(nativeShader, freqXLoc, freqX, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(nativeShader, freqYLoc, freqY, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(nativeShader, ampXLoc, ampX, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(nativeShader, ampYLoc, ampY, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(nativeShader, speedXLoc, speedX, ShaderUniformDataType.Float);
+        Raylib.SetShaderValue(nativeShader, speedYLoc, speedY, ShaderUniformDataType.Float);
 
         float seconds = 0.0f;
 
@@ -83,7 +83,7 @@ public class TextureWaves
             //----------------------------------------------------------------------------------
             seconds += GetFrameTime();
 
-            Raylib.SetShaderValue(shader, secondsLoc, seconds, ShaderUniformDataType.Float);
+            Raylib.SetShaderValue(nativeShader, secondsLoc, seconds, ShaderUniformDataType.Float);
             //----------------------------------------------------------------------------------
 
             // Draw
@@ -91,7 +91,7 @@ public class TextureWaves
             BeginDrawing();
             ClearBackground(Color.RayWhite);
 
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
 
             DrawTexture(texture, 0, 0, Color.White);
             DrawTexture(texture, texture.Width, 0, Color.White);
@@ -104,7 +104,7 @@ public class TextureWaves
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
         UnloadTexture(texture);
 
         CloseWindow();

@@ -35,14 +35,14 @@ public class FirstPersonMaze
 
         Image imMap = LoadImage("resources/cubicmap.png");
         Texture2D cubicmap = LoadTextureFromImage(imMap);
-        Mesh mesh = GenMeshCubicmap(imMap, new Vector3(1.0f, 1.0f, 1.0f));
-        Model model = LoadModelFromMesh(mesh);
+        NativeMesh nativeMesh = GenMeshCubicmap(imMap, new Vector3(1.0f, 1.0f, 1.0f));
+        NativeModel nativeModel = LoadModelFromMesh(nativeMesh);
 
         // NOTE: By default each cube is mapped to one part of texture atlas
         Texture2D texture = LoadTexture("resources/cubicmap_atlas.png");
 
         // Set map diffuse texture
-        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Albedo, ref texture);
 
         // Get map image data to be used for collision detection
         Color* mapPixels = LoadImageColors(imMap);
@@ -124,7 +124,7 @@ public class FirstPersonMaze
 
             // Draw maze map
             BeginMode3D(camera);
-            DrawModel(model, mapPosition, 1.0f, Color.White);
+            DrawModel(nativeModel, mapPosition, 1.0f, Color.White);
             EndMode3D();
 
             DrawTextureEx(cubicmap, new Vector2(GetScreenWidth() - cubicmap.Width * 4 - 20, 20), 0.0f, 4.0f, Color.White);
@@ -145,7 +145,7 @@ public class FirstPersonMaze
 
         UnloadTexture(cubicmap);
         UnloadTexture(texture);
-        UnloadModel(model);
+        UnloadModel(nativeModel);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

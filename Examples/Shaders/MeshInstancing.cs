@@ -59,7 +59,7 @@ public class MeshInstancing
 
         // Number of instances to display
         const int instances = 10000;
-        Mesh cube = GenMeshCube(1.0f, 1.0f, 1.0f);
+        NativeMesh cube = GenMeshCube(1.0f, 1.0f, 1.0f);
 
         // Rotation state of instances
         Matrix4x4[] rotations = new Matrix4x4[instances];
@@ -88,7 +88,7 @@ public class MeshInstancing
 
         // Pre-multiplied transformations passed to rlgl
         Matrix4x4[] transforms = new Matrix4x4[instances];
-        Shader shader = LoadShader(
+        NativeShader nativeShader = LoadShader(
             "resources/shaders/glsl330/lighting_instancing.vs",
             "resources/shaders/glsl330/lighting.fs"
         );
@@ -96,19 +96,19 @@ public class MeshInstancing
         // Get some shader loactions
         unsafe
         {
-            int* locs = (int*)shader.Locs;
-            locs[(int)ShaderLocationIndex.MatrixMvp] = GetShaderLocation(shader, "mvp");
-            locs[(int)ShaderLocationIndex.VectorView] = GetShaderLocation(shader, "viewPos");
+            int* locs = (int*)nativeShader.Locs;
+            locs[(int)ShaderLocationIndex.MatrixMvp] = GetShaderLocation(nativeShader, "mvp");
+            locs[(int)ShaderLocationIndex.VectorView] = GetShaderLocation(nativeShader, "viewPos");
             locs[(int)ShaderLocationIndex.MatrixModel] = GetShaderLocationAttrib(
-                shader,
+                nativeShader,
                 "instanceTransform"
             );
         }
 
         // Ambient light level
-        int ambientLoc = GetShaderLocation(shader, "ambient");
+        int ambientLoc = GetShaderLocation(nativeShader, "ambient");
         Raylib.SetShaderValue(
-            shader,
+            nativeShader,
             ambientLoc,
             new float[] { 0.2f, 0.2f, 0.2f, 1.0f },
             ShaderUniformDataType.Vec4
@@ -120,11 +120,11 @@ public class MeshInstancing
             new Vector3(50, 50, 0),
             Vector3.Zero,
             Color.White,
-            shader
+            nativeShader
         );
 
         Material material = LoadMaterialDefault();
-        material.Shader = shader;
+        material.NativeShader = nativeShader;
         unsafe
         {
             material.Maps[(int)MaterialMapIndex.Diffuse].Color = Color.Red;
@@ -244,7 +244,7 @@ public class MeshInstancing
             // Update the light shader with the camera view position
             float[] cameraPos = { camera.Position.X, camera.Position.Y, camera.Position.Z };
             Raylib.SetShaderValue(
-                shader,
+                nativeShader,
                 (int)ShaderLocationIndex.VectorView,
                 cameraPos,
                 ShaderUniformDataType.Vec3

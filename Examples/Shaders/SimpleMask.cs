@@ -44,18 +44,18 @@ public class SimpleMask
         camera.Projection = CameraProjection.Perspective;
 
         // Define our three models to show the shader on
-        Mesh torus = GenMeshTorus(.3f, 1, 16, 32);
-        Model model1 = LoadModelFromMesh(torus);
+        NativeMesh torus = GenMeshTorus(.3f, 1, 16, 32);
+        NativeModel model1 = LoadModelFromMesh(torus);
 
-        Mesh cube = GenMeshCube(.8f, .8f, .8f);
-        Model model2 = LoadModelFromMesh(cube);
+        NativeMesh cube = GenMeshCube(.8f, .8f, .8f);
+        NativeModel model2 = LoadModelFromMesh(cube);
 
         // Generate model to be shaded just to see the gaps in the other two
-        Mesh sphere = GenMeshSphere(1, 16, 16);
-        Model model3 = LoadModelFromMesh(sphere);
+        NativeMesh sphere = GenMeshSphere(1, 16, 16);
+        NativeModel model3 = LoadModelFromMesh(sphere);
 
         // Load the shader
-        Shader shader = LoadShader("resources/shaders/glsl330/mask.vs", "resources/shaders/glsl330/mask.fs");
+        NativeShader nativeShader = LoadShader("resources/shaders/glsl330/mask.vs", "resources/shaders/glsl330/mask.fs");
 
         // Load and apply the diffuse texture (colour map)
         Texture2D texDiffuse = LoadTexture("resources/plasma.png");
@@ -81,18 +81,18 @@ public class SimpleMask
         maps = (MaterialMap*)materials[0].Maps;
         maps[(int)MaterialMapIndex.Emission].Texture = texMask;
 
-        int* locs = shader.Locs;
-        locs[(int)ShaderLocationIndex.MapEmission] = GetShaderLocation(shader, "mask");
+        int* locs = nativeShader.Locs;
+        locs[(int)ShaderLocationIndex.MapEmission] = GetShaderLocation(nativeShader, "mask");
 
         // Frame is incremented each frame to animate the shader
-        int shaderFrame = GetShaderLocation(shader, "framesCounter");
+        int shaderFrame = GetShaderLocation(nativeShader, "framesCounter");
 
         // Apply the shader to the two models
         materials = model1.Materials;
-        materials[0].Shader = shader;
+        materials[0].NativeShader = nativeShader;
 
         materials = (Material*)model2.Materials;
-        materials[0].Shader = shader;
+        materials[0].NativeShader = nativeShader;
 
         int framesCounter = 0;
 
@@ -113,7 +113,7 @@ public class SimpleMask
             rotation.Z -= 0.0025f;
 
             // Send frames counter to shader for animation
-            Raylib.SetShaderValue(shader, shaderFrame, framesCounter, ShaderUniformDataType.Int);
+            Raylib.SetShaderValue(nativeShader, shaderFrame, framesCounter, ShaderUniformDataType.Int);
 
             // Rotate one of the models
             model1.Transform = MatrixRotateXYZ(rotation);
@@ -154,7 +154,7 @@ public class SimpleMask
         UnloadTexture(texDiffuse);
         UnloadTexture(texMask);
 
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

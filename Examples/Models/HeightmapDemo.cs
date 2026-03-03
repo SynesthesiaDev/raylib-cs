@@ -36,11 +36,11 @@ public class HeightmapDemo
         Image image = LoadImage("resources/heightmap.png");
         Texture2D texture = LoadTextureFromImage(image);
 
-        Mesh mesh = GenMeshHeightmap(image, new Vector3(16, 8, 16));
-        Model model = LoadModelFromMesh(mesh);
+        NativeMesh nativeMesh = GenMeshHeightmap(image, new Vector3(16, 8, 16));
+        NativeModel nativeModel = LoadModelFromMesh(nativeMesh);
 
         // Set map diffuse texture
-        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Albedo, ref texture);
 
         Vector3 mapPosition = new(-8.0f, 0.0f, -8.0f);
 
@@ -64,7 +64,7 @@ public class HeightmapDemo
 
             BeginMode3D(camera);
 
-            DrawModel(model, mapPosition, 1.0f, Color.Red);
+            DrawModel(nativeModel, mapPosition, 1.0f, Color.Red);
 
             DrawGrid(20, 1.0f);
 
@@ -82,7 +82,7 @@ public class HeightmapDemo
         // De-Initialization
         //--------------------------------------------------------------------------------------
         UnloadTexture(texture);
-        UnloadModel(model);
+        UnloadModel(nativeModel);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

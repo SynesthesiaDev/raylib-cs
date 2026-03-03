@@ -28,9 +28,6 @@ public class SpriteButton
 
         InitWindow(screenWidth, screenHeight, "raylib [textures] example - sprite button");
 
-        InitAudioDevice();
-
-        Sound fxButton = LoadSound("resources/audio/buttonfx.wav");
         Texture2D button = LoadTexture("resources/button.png");
 
         // Define frame rectangle for drawing
@@ -88,7 +85,6 @@ public class SpriteButton
 
             if (btnAction)
             {
-                PlaySound(fxButton);
                 // TODO: Any desired action
             }
 
@@ -111,9 +107,7 @@ public class SpriteButton
         // De-Initialization
         //--------------------------------------------------------------------------------------
         UnloadTexture(button);
-        UnloadSound(fxButton);
 
-        CloseAudioDevice();
         CloseWindow();
         //--------------------------------------------------------------------------------------
 

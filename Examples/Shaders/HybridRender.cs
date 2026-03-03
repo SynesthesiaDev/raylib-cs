@@ -13,7 +13,6 @@
 *
 ********************************************************************************************/
 
-using System;
 using System.Numerics;
 using static Raylib_cs.Raylib;
 
@@ -40,11 +39,11 @@ public class HybridRender
         InitWindow(screenWidth, screenHeight, "raylib [shaders] example - hybrid render");
 
         // This shader calculates pixel depth and color using raymarch
-        Shader shdrRaymarch = LoadShader(null, $"resources/shaders/glsl{GLSL_VERSION}/hybrid_raymarch.fs");
+        NativeShader shdrRaymarch = LoadShader(null, $"resources/shaders/glsl{GLSL_VERSION}/hybrid_raymarch.fs");
 
         // This Shader is a standard rasterization fragment shader with the addition of depth writing
         // You are required to write depth for all shaders if one shader does it
-        Shader shdrRaster = LoadShader(null, $"resources/shaders/glsl{GLSL_VERSION}/hybrid_raster.fs");
+        NativeShader shdrRaster = LoadShader(null, $"resources/shaders/glsl{GLSL_VERSION}/hybrid_raster.fs");
 
         // Declare struct used to store camera locs
         RayLocs marchLocs = new();

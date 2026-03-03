@@ -7,7 +7,7 @@ namespace Raylib_cs;
 /// Transform, vertex transformation data
 /// </summary>
 [StructLayout(LayoutKind.Sequential)]
-public record struct Transform
+public record struct NativeTransform
 {
     /// <summary>
     /// Translation

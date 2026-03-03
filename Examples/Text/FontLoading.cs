@@ -41,11 +41,11 @@ public class FontLoading
         // NOTE: Textures/Fonts MUST be loaded after Window initialization (OpenGL context is required)
 
         // BMFont (AngelCode) : Font data and image atlas have been generated using external program
-        Font fontBm = LoadFont("resources/fonts/pixantiqua.fnt");
+        NativeFont nativeFontBm = LoadFont("resources/fonts/pixantiqua.fnt");
 
         // TTF font : Font data and atlas are generated directly from TTF
         // NOTE: We define a font base size of 32 pixels tall and up-to 250 characters
-        Font fontTtf = LoadFontEx("resources/fonts/pixantiqua.ttf", 32, null, 250);
+        NativeFont nativeFontTtf = LoadFontEx("resources/fonts/pixantiqua.ttf", 32, null, 250);
 
         bool useTtf = false;
 
@@ -76,12 +76,12 @@ public class FontLoading
 
             if (!useTtf)
             {
-                DrawTextEx(fontBm, msg, new Vector2(20.0f, 100.0f), fontBm.BaseSize, 2, Color.Maroon);
+                DrawTextEx(nativeFontBm, msg, new Vector2(20.0f, 100.0f), nativeFontBm.BaseSize, 2, Color.Maroon);
                 DrawText("Using BMFont (Angelcode) imported", 20, GetScreenHeight() - 30, 20, Color.Gray);
             }
             else
             {
-                DrawTextEx(fontTtf, msg, new Vector2(20.0f, 100.0f), fontTtf.BaseSize, 2, Color.Lime);
+                DrawTextEx(nativeFontTtf, msg, new Vector2(20.0f, 100.0f), nativeFontTtf.BaseSize, 2, Color.Lime);
                 DrawText("Using TTF font generated", 20, GetScreenHeight() - 30, 20, Color.Gray);
             }
 
@@ -91,8 +91,8 @@ public class FontLoading
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadFont(fontBm);
-        UnloadFont(fontTtf);
+        UnloadFont(nativeFontBm);
+        UnloadFont(nativeFontTtf);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

@@ -43,13 +43,13 @@ public class ModelShader
         camera.FovY = 45.0f;
         camera.Projection = CameraProjection.Perspective;
 
-        Model model = LoadModel("resources/models/obj/watermill.obj");
+        NativeModel nativeModel = LoadModel("resources/models/obj/watermill.obj");
         Texture2D texture = LoadTexture("resources/models/obj/watermill_diffuse.png");
-        Shader shader = LoadShader("resources/shaders/glsl330/base.vs",
+        NativeShader nativeShader = LoadShader("resources/shaders/glsl330/base.vs",
                                    "resources/shaders/glsl330/grayscale.fs");
 
-        Raylib.SetMaterialShader(ref model, 0, ref shader);
-        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialShader(ref nativeModel, 0, ref nativeShader);
+        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Albedo, ref texture);
 
         Vector3 position = new(0.0f, 0.0f, 0.0f);
 
@@ -71,7 +71,7 @@ public class ModelShader
 
             BeginMode3D(camera);
 
-            DrawModel(model, position, 0.2f, Color.White);
+            DrawModel(nativeModel, position, 0.2f, Color.White);
 
             DrawGrid(10, 1.0f);
 
@@ -96,9 +96,9 @@ public class ModelShader
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
         UnloadTexture(texture);
-        UnloadModel(model);
+        UnloadModel(nativeModel);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

@@ -45,7 +45,7 @@ public class Eratosthenes
 
         // Load Eratosthenes shader
         // NOTE: Defining 0 (NULL) for vertex shader forces usage of internal default vertex shader
-        Shader shader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/eratosthenes.fs");
+        NativeShader nativeShader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/eratosthenes.fs");
 
         SetTargetFPS(60);
         //--------------------------------------------------------------------------------------
@@ -76,7 +76,7 @@ public class Eratosthenes
             // End drawing to texture (now we have a blank texture available for the shader)
             EndTextureMode();
 
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
             // NOTE: Render texture must be y-flipped due to default OpenGL coordinates (left-bottom)
             DrawTextureRec(
                 target.Texture,
@@ -92,7 +92,7 @@ public class Eratosthenes
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
         UnloadRenderTexture(target);
 
         CloseWindow();

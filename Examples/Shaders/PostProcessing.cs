@@ -78,18 +78,18 @@ public class PostProcessing
         camera.FovY = 45.0f;
         camera.Projection = CameraProjection.Perspective;
 
-        Model model = LoadModel("resources/models/obj/church.obj");
+        NativeModel nativeModel = LoadModel("resources/models/obj/church.obj");
         Texture2D texture = LoadTexture("resources/models/obj/church_diffuse.png");
 
         // Set model diffuse texture
-        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Albedo, ref texture);
 
         Vector3 position = new(0.0f, 0.0f, 0.0f);
 
         // Load all postpro shaders
         // NOTE 1: All postpro shader use the base vertex shader (DEFAULT_VERTEX_SHADER)
         // NOTE 2: We load the correct shader depending on GLSL version
-        Shader[] shaders = new Shader[(int)PostproShader.Max];
+        NativeShader[] shaders = new NativeShader[(int)PostproShader.Max];
 
         // NOTE: Defining null (NULL) for vertex shader forces usage of internal default vertex shader
         string shaderPath = "resources/shaders/glsl330";
@@ -151,7 +151,7 @@ public class PostProcessing
 
             BeginMode3D(camera);
 
-            DrawModel(model, position, 0.1f, Color.White);
+            DrawModel(nativeModel, position, 0.1f, Color.White);
 
             DrawGrid(10, 1.0f);
 
@@ -195,7 +195,7 @@ public class PostProcessing
         }
 
         UnloadTexture(texture);
-        UnloadModel(model);
+        UnloadModel(nativeModel);
         UnloadRenderTexture(target);
 
         CloseWindow();

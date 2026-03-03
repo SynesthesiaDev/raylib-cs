@@ -55,25 +55,25 @@ public class BasicLighting
         camera.Projection = CameraProjection.Perspective;
 
         // Load plane model from a generated mesh
-        Model model = LoadModelFromMesh(GenMeshPlane(10.0f, 10.0f, 3, 3));
-        Model cube = LoadModelFromMesh(GenMeshCube(2.0f, 4.0f, 2.0f));
+        NativeModel nativeModel = LoadModelFromMesh(GenMeshPlane(10.0f, 10.0f, 3, 3));
+        NativeModel cube = LoadModelFromMesh(GenMeshCube(2.0f, 4.0f, 2.0f));
 
-        Shader shader = LoadShader(
+        NativeShader nativeShader = LoadShader(
             "resources/shaders/glsl330/lighting.vs",
             "resources/shaders/glsl330/lighting.fs"
         );
 
         // Get some required shader loactions
-        shader.Locs[(int)ShaderLocationIndex.VectorView] = GetShaderLocation(shader, "viewPos");
+        nativeShader.Locs[(int)ShaderLocationIndex.VectorView] = GetShaderLocation(nativeShader, "viewPos");
 
         // ambient light level
-        int ambientLoc = GetShaderLocation(shader, "ambient");
+        int ambientLoc = GetShaderLocation(nativeShader, "ambient");
         float[] ambient = new[] { 0.1f, 0.1f, 0.1f, 1.0f };
-        Raylib.SetShaderValue(shader, ambientLoc, ambient, ShaderUniformDataType.Vec4);
+        Raylib.SetShaderValue(nativeShader, ambientLoc, ambient, ShaderUniformDataType.Vec4);
 
         // Assign out lighting shader to model
-        model.Materials[0].Shader = shader;
-        cube.Materials[0].Shader = shader;
+        nativeModel.Materials[0].NativeShader = nativeShader;
+        cube.Materials[0].NativeShader = nativeShader;
 
         // Using 4 point lights: Color.gold, Color.red, Color.green and Color.blue
         Light[] lights = new Light[4];
@@ -83,7 +83,7 @@ public class BasicLighting
             new Vector3(-2, 1, -2),
             Vector3.Zero,
             Color.Yellow,
-            shader
+            nativeShader
         );
         lights[1] = Rlights.CreateLight(
             1,
@@ -91,7 +91,7 @@ public class BasicLighting
             new Vector3(2, 1, 2),
             Vector3.Zero,
             Color.Red,
-            shader
+            nativeShader
         );
         lights[2] = Rlights.CreateLight(
             2,
@@ -99,7 +99,7 @@ public class BasicLighting
             new Vector3(-2, 1, 2),
             Vector3.Zero,
             Color.Green,
-            shader
+            nativeShader
         );
         lights[3] = Rlights.CreateLight(
             3,
@@ -107,7 +107,7 @@ public class BasicLighting
             new Vector3(2, 1, -2),
             Vector3.Zero,
             Color.Blue,
-            shader
+            nativeShader
         );
 
         SetTargetFPS(60);
@@ -138,15 +138,15 @@ public class BasicLighting
             }
 
             // Update light values (actually, only enable/disable them)
-            Rlights.UpdateLightValues(shader, lights[0]);
-            Rlights.UpdateLightValues(shader, lights[1]);
-            Rlights.UpdateLightValues(shader, lights[2]);
-            Rlights.UpdateLightValues(shader, lights[3]);
+            Rlights.UpdateLightValues(nativeShader, lights[0]);
+            Rlights.UpdateLightValues(nativeShader, lights[1]);
+            Rlights.UpdateLightValues(nativeShader, lights[2]);
+            Rlights.UpdateLightValues(nativeShader, lights[3]);
 
             // Update the light shader with the camera view position
             Raylib.SetShaderValue(
-                shader,
-                shader.Locs[(int)ShaderLocationIndex.VectorView],
+                nativeShader,
+                nativeShader.Locs[(int)ShaderLocationIndex.VectorView],
                 camera.Position,
                 ShaderUniformDataType.Vec3
             );
@@ -159,7 +159,7 @@ public class BasicLighting
 
             BeginMode3D(camera);
 
-            DrawModel(model, Vector3.Zero, 1.0f, Color.White);
+            DrawModel(nativeModel, Vector3.Zero, 1.0f, Color.White);
             DrawModel(cube, Vector3.Zero, 1.0f, Color.White);
 
             // Draw markers to show where the lights are
@@ -212,9 +212,9 @@ public class BasicLighting
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadModel(model);
+        UnloadModel(nativeModel);
         UnloadModel(cube);
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

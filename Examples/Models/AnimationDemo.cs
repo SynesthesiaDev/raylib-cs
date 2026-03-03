@@ -41,9 +41,9 @@ public class AnimationDemo
         camera.FovY = 45.0f;
         camera.Projection = CameraProjection.Perspective;
 
-        Model model = LoadModel("resources/models/iqm/guy.iqm");
+        NativeModel nativeModel = LoadModel("resources/models/iqm/guy.iqm");
         Texture2D texture = LoadTexture("resources/models/iqm/guytex.png");
-        Raylib.SetMaterialTexture(ref model, 0, MaterialMapIndex.Albedo, ref texture);
+        Raylib.SetMaterialTexture(ref nativeModel, 0, MaterialMapIndex.Albedo, ref texture);
 
         Vector3 position = new(0.0f, 0.0f, 0.0f);
         // Load animation data
@@ -65,7 +65,7 @@ public class AnimationDemo
             if (IsKeyDown(KeyboardKey.Space))
             {
                 animFrameCounter++;
-                UpdateModelAnimation(model, anims[0], animFrameCounter);
+                UpdateModelAnimation(nativeModel, anims[0], animFrameCounter);
                 if (animFrameCounter >= anims[0].FrameCount)
                 {
                     animFrameCounter = 0;
@@ -81,7 +81,7 @@ public class AnimationDemo
             BeginMode3D(camera);
 
             DrawModelEx(
-                model,
+                nativeModel,
                 position,
                 new Vector3(1.0f, 0.0f, 0.0f),
                 -90.0f,
@@ -89,7 +89,7 @@ public class AnimationDemo
                 Color.White
             );
 
-            for (int i = 0; i < model.BoneCount; i++)
+            for (int i = 0; i < nativeModel.BoneCount; i++)
             {
                 var framePoses = anims[0].FramePoses;
                 DrawCube(framePoses[animFrameCounter][i].Translation, 0.2f, 0.2f, 0.2f, Color.Red);
@@ -112,7 +112,7 @@ public class AnimationDemo
 
         UnloadModelAnimations(anims, animsCount);
 
-        UnloadModel(model);
+        UnloadModel(nativeModel);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

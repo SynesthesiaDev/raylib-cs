@@ -35,7 +35,7 @@ public class ShapesTextures
         Texture2D fudesumi = LoadTexture("resources/fudesumi.png");
 
         // NOTE: Using GLSL 330 shader version, on OpenGL ES 2.0 use GLSL 100 shader version
-        Shader shader = LoadShader(
+        NativeShader nativeShader = LoadShader(
             "resources/shaders/glsl330/base.vs",
             "resources/shaders/glsl330/grayscale.fs"
         );
@@ -65,7 +65,7 @@ public class ShapesTextures
 
 
             // Activate our custom shader to be applied on next shapes/textures drawings
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
 
             DrawText("USING CUSTOM SHADER", 190, 40, 10, Color.Red);
 
@@ -93,7 +93,7 @@ public class ShapesTextures
             DrawPoly(new Vector2(430, 320), 6, 80, 0, Color.Brown);
 
             // Activate our custom shader to be applied on next shapes/textures drawings
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
 
             // Using custom shader
             DrawTexture(fudesumi, 500, -30, Color.White);
@@ -109,7 +109,7 @@ public class ShapesTextures
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
         UnloadTexture(fudesumi);
 
         CloseWindow();

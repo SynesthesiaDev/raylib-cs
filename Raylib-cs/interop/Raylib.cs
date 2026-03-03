@@ -310,7 +310,7 @@ public static unsafe partial class Raylib
 
     /// <summary>Begin custom shader drawing</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void BeginShaderMode(Shader shader);
+    public static extern void BeginShaderMode(NativeShader nativeShader);
 
     /// <summary>End custom shader drawing (use default shader)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -356,28 +356,28 @@ public static unsafe partial class Raylib
 
     /// <summary>Load shader from files and bind default locations</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Shader LoadShader(sbyte* vsFileName, sbyte* fsFileName);
+    public static extern NativeShader LoadShader(sbyte* vsFileName, sbyte* fsFileName);
 
     /// <summary>Load shader from code strings and bind default locations</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Shader LoadShaderFromMemory(sbyte* vsCode, sbyte* fsCode);
+    public static extern NativeShader LoadShaderFromMemory(sbyte* vsCode, sbyte* fsCode);
 
     /// <summary>Check if a shader is valid (loaded on GPU)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsShaderValid(Shader shader);
+    public static extern CBool IsShaderValid(NativeShader nativeShader);
 
     /// <summary>Get shader uniform location</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int GetShaderLocation(Shader shader, sbyte* uniformName);
+    public static extern int GetShaderLocation(NativeShader nativeShader, sbyte* uniformName);
 
     /// <summary>Get shader attribute location</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int GetShaderLocationAttrib(Shader shader, sbyte* attribName);
+    public static extern int GetShaderLocationAttrib(NativeShader nativeShader, sbyte* attribName);
 
     /// <summary>Set shader uniform value</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SetShaderValue(
-        Shader shader,
+        NativeShader nativeShader,
         int locIndex,
         void* value,
         ShaderUniformDataType uniformType
@@ -386,7 +386,7 @@ public static unsafe partial class Raylib
     /// <summary>Set shader uniform value vector</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SetShaderValueV(
-        Shader shader,
+        NativeShader nativeShader,
         int locIndex,
         void* value,
         ShaderUniformDataType uniformType,
@@ -395,15 +395,15 @@ public static unsafe partial class Raylib
 
     /// <summary>Set shader uniform value (matrix 4x4)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetShaderValueMatrix(Shader shader, int locIndex, Matrix4x4 mat);
+    public static extern void SetShaderValueMatrix(NativeShader nativeShader, int locIndex, Matrix4x4 mat);
 
     /// <summary>Set shader uniform value for texture (sampler2d)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetShaderValueTexture(Shader shader, int locIndex, Texture2D texture);
+    public static extern void SetShaderValueTexture(NativeShader nativeShader, int locIndex, Texture2D texture);
 
     /// <summary>Unload shader from GPU memory (VRAM)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadShader(Shader shader);
+    public static extern void UnloadShader(NativeShader nativeShader);
 
 
     // Screen-space-related functions
@@ -1534,7 +1534,7 @@ public static unsafe partial class Raylib
 
     /// <summary>Create an image from text (custom sprite font)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Image ImageTextEx(Font font, sbyte* text, float fontSize, float spacing, Color tint);
+    public static extern Image ImageTextEx(NativeFont nativeFont, sbyte* text, float fontSize, float spacing, Color tint);
 
     /// <summary>Convert image data to desired format</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1773,7 +1773,7 @@ public static unsafe partial class Raylib
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void ImageDrawTextEx(
         Image* dst,
-        Font font,
+        NativeFont nativeFont,
         sbyte* text,
         Vector2 position,
         float fontSize,
@@ -1959,26 +1959,26 @@ public static unsafe partial class Raylib
 
     /// <summary>Get the default Font</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Font GetFontDefault();
+    public static extern NativeFont GetFontDefault();
 
     /// <summary>Load font from file into GPU memory (VRAM)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Font LoadFont(sbyte* fileName);
+    public static extern NativeFont LoadFont(sbyte* fileName);
 
     /// <summary>
     /// Load font from file with extended parameters, use NULL for codepoints and 0 for codepointCount to load
     /// the default character set, font size is provided in pixels height
     /// </summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Font LoadFontEx(sbyte* fileName, int fontSize, int* codepoints, int codepointCount);
+    public static extern NativeFont LoadFontEx(sbyte* fileName, int fontSize, int* codepoints, int codepointCount);
 
     /// <summary>Load font from Image (XNA style)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Font LoadFontFromImage(Image image, Color key, int firstChar);
+    public static extern NativeFont LoadFontFromImage(Image image, Color key, int firstChar);
 
     /// <summary>Load font from memory buffer, fileType refers to extension: i.e. ".ttf"</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Font LoadFontFromMemory(
+    public static extern NativeFont LoadFontFromMemory(
         sbyte* fileType,
         byte* fileData,
         int dataSize,
@@ -1989,7 +1989,7 @@ public static unsafe partial class Raylib
 
     /// <summary>Check if a font is valid (font data loaded, WARNING: GPU texture not checked)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsFontValid(Font font);
+    public static extern CBool IsFontValid(NativeFont nativeFont);
 
     /// <summary>Load font data for further use</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2019,11 +2019,11 @@ public static unsafe partial class Raylib
 
     /// <summary>Unload Font from GPU memory (VRAM)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadFont(Font font);
+    public static extern void UnloadFont(NativeFont nativeFont);
 
     /// <summary>Export font as code file, returns true on success</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool ExportFontAsCode(Font font, sbyte* fileName);
+    public static extern CBool ExportFontAsCode(NativeFont nativeFont, sbyte* fileName);
 
 
     // Text drawing functions
@@ -2039,7 +2039,7 @@ public static unsafe partial class Raylib
     /// <summary>Draw text using font and additional parameters</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void DrawTextEx(
-        Font font,
+        NativeFont nativeFont,
         sbyte* text,
         Vector2 position,
         float fontSize,
@@ -2050,7 +2050,7 @@ public static unsafe partial class Raylib
     /// <summary>Draw text using Font and pro parameters (rotation)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void DrawTextPro(
-        Font font,
+        NativeFont nativeFont,
         sbyte* text,
         Vector2 position,
         Vector2 origin,
@@ -2063,7 +2063,7 @@ public static unsafe partial class Raylib
     /// <summary>Draw one character (codepoint)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void DrawTextCodepoint(
-        Font font,
+        NativeFont nativeFont,
         int codepoint,
         Vector2 position,
         float fontSize,
@@ -2073,7 +2073,7 @@ public static unsafe partial class Raylib
     /// <summary>Draw multiple characters (codepoint)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void DrawTextCodepoints(
-        Font font,
+        NativeFont nativeFont,
         int* codepoints,
         int count,
         Vector2 position,
@@ -2094,25 +2094,25 @@ public static unsafe partial class Raylib
 
     /// <summary>Measure string size for Font</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Vector2 MeasureTextEx(Font font, sbyte* text, float fontSize, float spacing);
+    public static extern Vector2 MeasureTextEx(NativeFont nativeFont, sbyte* text, float fontSize, float spacing);
 
     /// <summary>
     /// Get glyph index position in font for a codepoint (unicode character), fallback to '?' if not found
     /// </summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int GetGlyphIndex(Font font, int character);
+    public static extern int GetGlyphIndex(NativeFont nativeFont, int character);
 
     /// <summary>
     /// Get glyph font info data for a codepoint (unicode character), fallback to '?' if not found
     /// </summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern GlyphInfo GetGlyphInfo(Font font, int codepoint);
+    public static extern GlyphInfo GetGlyphInfo(NativeFont nativeFont, int codepoint);
 
     /// <summary>
     /// Get glyph rectangle in font atlas for a codepoint (unicode character), fallback to '?' if not found
     /// </summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Rectangle GetGlyphAtlasRec(Font font, int codepoint);
+    public static extern Rectangle GetGlyphAtlasRec(NativeFont nativeFont, int codepoint);
 
 
     // Text codepoints management functions (unicode characters)
@@ -2376,35 +2376,35 @@ public static unsafe partial class Raylib
 
     /// <summary>Load model from files (meshes and materials)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Model LoadModel(sbyte* fileName);
+    public static extern NativeModel LoadModel(sbyte* fileName);
 
     /// <summary>Load model from generated mesh (default material)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Model LoadModelFromMesh(Mesh mesh);
+    public static extern NativeModel LoadModelFromMesh(NativeMesh nativeMesh);
 
     /// <summary>Check if a model is valid (loaded in GPU, VAO/VBOs)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsModelValid(Model model);
+    public static extern CBool IsModelValid(NativeModel nativeModel);
 
     /// <summary>Unload model from memory (RAM and/or VRAM)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadModel(Model model);
+    public static extern void UnloadModel(NativeModel nativeModel);
 
     /// <summary>Compute model bounding box limits (considers all meshes)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern BoundingBox GetModelBoundingBox(Model model);
+    public static extern BoundingBox GetModelBoundingBox(NativeModel nativeModel);
 
 
     // Model drawing functions
 
     /// <summary>Draw a model (with texture if set)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DrawModel(Model model, Vector3 position, float scale, Color tint);
+    public static extern void DrawModel(NativeModel nativeModel, Vector3 position, float scale, Color tint);
 
     /// <summary>Draw a model with extended parameters</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void DrawModelEx(
-        Model model,
+        NativeModel nativeModel,
         Vector3 position,
         Vector3 rotationAxis,
         float rotationAngle,
@@ -2414,12 +2414,12 @@ public static unsafe partial class Raylib
 
     /// <summary>Draw a model wires (with texture if set)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DrawModelWires(Model model, Vector3 position, float scale, Color tint);
+    public static extern void DrawModelWires(NativeModel nativeModel, Vector3 position, float scale, Color tint);
 
     /// <summary>Draw a model wires (with texture if set) with extended parameters</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void DrawModelWiresEx(
-        Model model,
+        NativeModel nativeModel,
         Vector3 position,
         Vector3 rotationAxis,
         float rotationAngle,
@@ -2429,12 +2429,12 @@ public static unsafe partial class Raylib
 
     /// <summary>Draw a model as points</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DrawModelPoints(Model model, Vector3 position, float scale, Color tint);
+    public static extern void DrawModelPoints(NativeModel nativeModel, Vector3 position, float scale, Color tint);
 
     /// <summary>Draw a model as points with extended parameters</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void DrawModelPointsEx(
-        Model model,
+        NativeModel nativeModel,
         Vector3 position,
         Vector3 rotationAxis,
         float rotationAngle,
@@ -2486,85 +2486,85 @@ public static unsafe partial class Raylib
 
     /// <summary>Upload vertex data into GPU and provided VAO/VBO ids</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UploadMesh(Mesh* mesh, CBool dynamic);
+    public static extern void UploadMesh(NativeMesh* mesh, CBool dynamic);
 
     /// <summary>Update mesh vertex data in GPU for a specific buffer index</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UpdateMeshBuffer(Mesh mesh, int index, void* data, int dataSize, int offset);
+    public static extern void UpdateMeshBuffer(NativeMesh nativeMesh, int index, void* data, int dataSize, int offset);
 
     /// <summary>Unload mesh from memory (RAM and/or VRAM)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadMesh(Mesh mesh);
+    public static extern void UnloadMesh(NativeMesh nativeMesh);
 
     /// <summary>Draw a 3d mesh with material and transform</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DrawMesh(Mesh mesh, Material material, Matrix4x4 transform);
+    public static extern void DrawMesh(NativeMesh nativeMesh, Material material, Matrix4x4 transform);
 
     /// <summary>Draw multiple mesh instances with material and different transforms</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DrawMeshInstanced(Mesh mesh, Material material, Matrix4x4* transforms, int instances);
+    public static extern void DrawMeshInstanced(NativeMesh nativeMesh, Material material, Matrix4x4* transforms, int instances);
 
     /// <summary>Compute mesh bounding box limits</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern BoundingBox GetMeshBoundingBox(Mesh mesh);
+    public static extern BoundingBox GetMeshBoundingBox(NativeMesh nativeMesh);
 
     /// <summary>Compute mesh tangents</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void GenMeshTangents(Mesh* mesh);
+    public static extern void GenMeshTangents(NativeMesh* mesh);
 
     /// <summary>Export mesh data to file, returns true on success</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool ExportMesh(Mesh mesh, sbyte* fileName);
+    public static extern CBool ExportMesh(NativeMesh nativeMesh, sbyte* fileName);
 
     /// <summary>Export mesh as code file (.h) defining multiple arrays of vertex attributes</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool ExportMeshAsCode(Mesh mesh, sbyte* fileName);
+    public static extern CBool ExportMeshAsCode(NativeMesh nativeMesh, sbyte* fileName);
 
     // Mesh generation functions
 
     /// <summary>Generate polygonal mesh</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshPoly(int sides, float radius);
+    public static extern NativeMesh GenMeshPoly(int sides, float radius);
 
     /// <summary>Generate plane mesh (with subdivisions)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshPlane(float width, float length, int resX, int resZ);
+    public static extern NativeMesh GenMeshPlane(float width, float length, int resX, int resZ);
 
     /// <summary>Generate cuboid mesh</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshCube(float width, float height, float length);
+    public static extern NativeMesh GenMeshCube(float width, float height, float length);
 
     /// <summary>Generate sphere mesh (standard sphere)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshSphere(float radius, int rings, int slices);
+    public static extern NativeMesh GenMeshSphere(float radius, int rings, int slices);
 
     /// <summary>Generate half-sphere mesh (no bottom cap)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshHemiSphere(float radius, int rings, int slices);
+    public static extern NativeMesh GenMeshHemiSphere(float radius, int rings, int slices);
 
     /// <summary>Generate cylinder mesh</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshCylinder(float radius, float height, int slices);
+    public static extern NativeMesh GenMeshCylinder(float radius, float height, int slices);
 
     /// <summary>Generate cone/pyramid mesh</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshCone(float radius, float height, int slices);
+    public static extern NativeMesh GenMeshCone(float radius, float height, int slices);
 
     /// <summary>Generate torus mesh</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshTorus(float radius, float size, int radSeg, int sides);
+    public static extern NativeMesh GenMeshTorus(float radius, float size, int radSeg, int sides);
 
     /// <summary>Generate trefoil knot mesh</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshKnot(float radius, float size, int radSeg, int sides);
+    public static extern NativeMesh GenMeshKnot(float radius, float size, int radSeg, int sides);
 
     /// <summary>Generate heightmap mesh from image data</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshHeightmap(Image heightmap, Vector3 size);
+    public static extern NativeMesh GenMeshHeightmap(Image heightmap, Vector3 size);
 
     /// <summary>Generate cubes-based map mesh from image data</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Mesh GenMeshCubicmap(Image cubicmap, Vector3 cubeSize);
+    public static extern NativeMesh GenMeshCubicmap(Image cubicmap, Vector3 cubeSize);
 
 
     // Material loading/unloading functions
@@ -2592,7 +2592,7 @@ public static unsafe partial class Raylib
 
     /// <summary>Set material for a mesh</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetModelMeshMaterial(Model* model, int meshId, int materialId);
+    public static extern void SetModelMeshMaterial(NativeModel* model, int meshId, int materialId);
 
 
     // Model animations loading/unloading functions
@@ -2603,11 +2603,11 @@ public static unsafe partial class Raylib
 
     /// <summary>Update model animation pose (CPU)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UpdateModelAnimation(Model model, ModelAnimation anim, int frame);
+    public static extern void UpdateModelAnimation(NativeModel nativeModel, ModelAnimation anim, int frame);
 
     /// <summary>Update model animation mesh bone matrices (GPU skinning)</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UpdateModelAnimationBones(Model model, ModelAnimation anim, int frame);
+    public static extern void UpdateModelAnimationBones(NativeModel nativeModel, ModelAnimation anim, int frame);
 
     /// <summary>Unload animation data</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2619,7 +2619,7 @@ public static unsafe partial class Raylib
 
     /// <summary>Check model animation skeleton match</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsModelAnimationValid(Model model, ModelAnimation anim);
+    public static extern CBool IsModelAnimationValid(NativeModel nativeModel, ModelAnimation anim);
 
     // Collision detection functions
 
@@ -2650,7 +2650,7 @@ public static unsafe partial class Raylib
 
     /// <summary>Get collision info between ray and mesh</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern RayCollision GetRayCollisionMesh(Ray ray, Mesh mesh, Matrix4x4 transform);
+    public static extern RayCollision GetRayCollisionMesh(Ray ray, NativeMesh nativeMesh, Matrix4x4 transform);
 
     /// <summary>Get collision info between ray and triangle</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -2660,302 +2660,302 @@ public static unsafe partial class Raylib
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern RayCollision GetRayCollisionQuad(Ray ray, Vector3 p1, Vector3 p2, Vector3 p3, Vector3 p4);
 
-
-    //------------------------------------------------------------------------------------
-    // Audio Loading and Playing Functions (Module: audio)
-    //------------------------------------------------------------------------------------
-
-    // Audio device management functions
-
-    /// <summary>Initialize audio device and context</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void InitAudioDevice();
-
-    /// <summary>Close the audio device and context</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void CloseAudioDevice();
-
-    /// <summary>Check if audio device has been initialized successfully</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsAudioDeviceReady();
-
-    /// <summary>Set master volume (listener)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetMasterVolume(float volume);
-
-    /// <summary>Get master volume (listener)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern float GetMasterVolume();
-
-
-    // Wave/Sound loading/unloading functions
-
-    /// <summary>Load wave data from file</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Wave LoadWave(sbyte* fileName);
-
-    /// <summary>Load wave from memory buffer, fileType refers to extension: i.e. ".wav"</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Wave LoadWaveFromMemory(sbyte* fileType, byte* fileData, int dataSize);
-
-    /// <summary>Checks if wave data is valid (data loaded and parameters)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsWaveValid(Wave wave);
-
-    /// <summary>Load sound from file</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Sound LoadSound(sbyte* fileName);
-
-    /// <summary>Load sound from wave data</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Sound LoadSoundFromWave(Wave wave);
-
-    /// <summary>Create a new sound that shares the same sample data as the source sound, does not own the sound data</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Sound LoadSoundAlias(Sound source);
-
-    /// <summary>Checks if a sound is valid (data loaded and buffers initialized)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsSoundValid(Sound sound);
-
-    /// <summary>Update sound buffer with new data</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UpdateSound(Sound sound, void* data, int sampleCount);
-
-    /// <summary>Unload wave data</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadWave(Wave wave);
-
-    /// <summary>Unload sound</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadSound(Sound sound);
-
-    /// <summary>Unload a sound alias (does not deallocate sample data)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadSoundAlias(Sound alias);
-
-    /// <summary>Export wave data to file</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool ExportWave(Wave wave, sbyte* fileName);
-
-    /// <summary>Export wave sample data to code (.h)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool ExportWaveAsCode(Wave wave, sbyte* fileName);
-
-
-    // Wave/Sound management functions
-
-    /// <summary>Play a sound</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void PlaySound(Sound sound);
-
-    /// <summary>Stop playing a sound</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void StopSound(Sound sound);
-
-    /// <summary>Pause a sound</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void PauseSound(Sound sound);
-
-    /// <summary>Resume a paused sound</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void ResumeSound(Sound sound);
-
-    /// <summary>Get number of sounds playing in the multichannel</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern int GetSoundsPlaying();
-
-    /// <summary>Check if a sound is currently playing</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsSoundPlaying(Sound sound);
-
-    /// <summary>Set volume for a sound (1.0 is max level)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetSoundVolume(Sound sound, float volume);
-
-    /// <summary>Set pitch for a sound (1.0 is base level)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetSoundPitch(Sound sound, float pitch);
-
-    /// <summary>Set pan for a sound (0.5 is center)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetSoundPan(Sound sound, float pan);
-
-    /// <summary>Copy a wave to a new wave</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Wave WaveCopy(Wave wave);
-
-    /// <summary>Crop a wave to defined frames range</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void WaveCrop(Wave* wave, int initFrame, int finalFrame);
-
-    /// <summary>Convert wave data to desired format</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void WaveFormat(Wave* wave, int sampleRate, int sampleSize, int channels);
-
-    /// <summary>Get samples data from wave as a floats array</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern float* LoadWaveSamples(Wave wave);
-
-    /// <summary>Unload samples data loaded with LoadWaveSamples()</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadWaveSamples(float* samples);
-
-    // Music management functions
-
-    /// <summary>Load music stream from file</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Music LoadMusicStream(sbyte* fileName);
-
-    /// <summary>Load music stream from memory buffer, fileType refers to extension: i.e. ".wav"</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern Music LoadMusicStreamFromMemory(sbyte* fileType, byte* data, int dataSize);
-
-    /// <summary>Checks if a music stream is valid (context and buffers initialized)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsMusicValid(Music music);
-
-    /// <summary>Unload music stream</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadMusicStream(Music music);
-
-    /// <summary>Start music playing</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void PlayMusicStream(Music music);
-
-    /// <summary>Check if music is playing</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsMusicStreamPlaying(Music music);
-
-    /// <summary>Updates buffers for music streaming</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UpdateMusicStream(Music music);
-
-    /// <summary>Stop music playing</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void StopMusicStream(Music music);
-
-    /// <summary>Pause music playing</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void PauseMusicStream(Music music);
-
-    /// <summary>Resume playing paused music</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void ResumeMusicStream(Music music);
-
-    /// <summary>Seek music to a position (in seconds)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SeekMusicStream(Music music, float position);
-
-    /// <summary>Set volume for music (1.0 is max level)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetMusicVolume(Music music, float volume);
-
-    /// <summary>Set pitch for a music (1.0 is base level)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetMusicPitch(Music music, float pitch);
-
-    /// <summary>Set pan for a music (0.5 is center)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetMusicPan(Music music, float pan);
-
-    /// <summary>Get music time length (in seconds)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern float GetMusicTimeLength(Music music);
-
-    /// <summary>Get current music time played (in seconds)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern float GetMusicTimePlayed(Music music);
-
-
-    // AudioStream management functions
-
-    /// <summary>Init audio stream (to stream raw audio pcm data)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern AudioStream LoadAudioStream(uint sampleRate, uint sampleSize, uint channels);
-
-    /// <summary>Checks if an audio stream is valid (buffers initialized)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsAudioStreamValid(AudioStream stream);
-
-    /// <summary>Unload audio stream and free memory</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UnloadAudioStream(AudioStream stream);
-
-    /// <summary>Update audio stream buffers with data</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void UpdateAudioStream(AudioStream stream, void* data, int frameCount);
-
-    /// <summary>Check if any audio stream buffers requires refill</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsAudioStreamProcessed(AudioStream stream);
-
-    /// <summary>Play audio stream</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void PlayAudioStream(AudioStream stream);
-
-    /// <summary>Pause audio stream</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void PauseAudioStream(AudioStream stream);
-
-    /// <summary>Resume audio stream</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void ResumeAudioStream(AudioStream stream);
-
-    /// <summary>Check if audio stream is playing</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern CBool IsAudioStreamPlaying(AudioStream stream);
-
-    /// <summary>Stop audio stream</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void StopAudioStream(AudioStream stream);
-
-    /// <summary>Set volume for audio stream (1.0 is max level)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetAudioStreamVolume(AudioStream stream, float volume);
-
-    /// <summary>Set pitch for audio stream (1.0 is base level)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetAudioStreamPitch(AudioStream stream, float pitch);
-
-    /// <summary>Set pan for audio stream (0.5 is centered)</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetAudioStreamPan(AudioStream stream, float pan);
-
-    /// <summary>Default size for new audio streams</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetAudioStreamBufferSizeDefault(int size);
-
-    /// <summary>Audio thread callback to request new data</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void SetAudioStreamCallback(
-        AudioStream stream,
-        delegate* unmanaged[Cdecl]<void*, uint, void> callback
-    );
-
-    /// <summary>Attach audio stream processor to stream</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void AttachAudioStreamProcessor(
-        AudioStream stream,
-        delegate* unmanaged[Cdecl]<void*, uint, void> processor
-    );
-
-    /// <summary>Detach audio stream processor from stream</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DetachAudioStreamProcessor(
-        AudioStream stream,
-        delegate* unmanaged[Cdecl]<void*, uint, void> processor
-    );
-
-    /// <summary>Attach audio stream processor to the entire audio pipeline</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void AttachAudioMixedProcessor(
-        delegate* unmanaged[Cdecl]<void*, uint, void> processor
-    );
-
-    /// <summary>Detach audio stream processor from the entire audio pipeline</summary>
-    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
-    public static extern void DetachAudioMixedProcessor(
-        delegate* unmanaged[Cdecl]<void*, uint, void> processor
-    );
+    //
+    // //------------------------------------------------------------------------------------
+    // // Audio Loading and Playing Functions (Module: audio)
+    // //------------------------------------------------------------------------------------
+    //
+    // // Audio device management functions
+    //
+    // /// <summary>Initialize audio device and context</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void InitAudioDevice();
+    //
+    // /// <summary>Close the audio device and context</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void CloseAudioDevice();
+    //
+    // /// <summary>Check if audio device has been initialized successfully</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool IsAudioDeviceReady();
+    //
+    // /// <summary>Set master volume (listener)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetMasterVolume(float volume);
+    //
+    // /// <summary>Get master volume (listener)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern float GetMasterVolume();
+    //
+    //
+    // // Wave/Sound loading/unloading functions
+    //
+    // /// <summary>Load wave data from file</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern Wave LoadWave(sbyte* fileName);
+    //
+    // /// <summary>Load wave from memory buffer, fileType refers to extension: i.e. ".wav"</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern Wave LoadWaveFromMemory(sbyte* fileType, byte* fileData, int dataSize);
+    //
+    // /// <summary>Checks if wave data is valid (data loaded and parameters)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool IsWaveValid(Wave wave);
+    //
+    // /// <summary>Load sound from file</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern Sound LoadSound(sbyte* fileName);
+    //
+    // /// <summary>Load sound from wave data</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern Sound LoadSoundFromWave(Wave wave);
+    //
+    // /// <summary>Create a new sound that shares the same sample data as the source sound, does not own the sound data</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern Sound LoadSoundAlias(Sound source);
+    //
+    // /// <summary>Checks if a sound is valid (data loaded and buffers initialized)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool IsSoundValid(Sound sound);
+    //
+    // /// <summary>Update sound buffer with new data</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void UpdateSound(Sound sound, void* data, int sampleCount);
+    //
+    // /// <summary>Unload wave data</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void UnloadWave(Wave wave);
+    //
+    // /// <summary>Unload sound</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void UnloadSound(Sound sound);
+    //
+    // /// <summary>Unload a sound alias (does not deallocate sample data)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void UnloadSoundAlias(Sound alias);
+    //
+    // /// <summary>Export wave data to file</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool ExportWave(Wave wave, sbyte* fileName);
+    //
+    // /// <summary>Export wave sample data to code (.h)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool ExportWaveAsCode(Wave wave, sbyte* fileName);
+    //
+    //
+    // // Wave/Sound management functions
+    //
+    // /// <summary>Play a sound</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void PlaySound(Sound sound);
+    //
+    // /// <summary>Stop playing a sound</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void StopSound(Sound sound);
+    //
+    // /// <summary>Pause a sound</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void PauseSound(Sound sound);
+    //
+    // /// <summary>Resume a paused sound</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void ResumeSound(Sound sound);
+    //
+    // /// <summary>Get number of sounds playing in the multichannel</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern int GetSoundsPlaying();
+    //
+    // /// <summary>Check if a sound is currently playing</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool IsSoundPlaying(Sound sound);
+    //
+    // /// <summary>Set volume for a sound (1.0 is max level)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetSoundVolume(Sound sound, float volume);
+    //
+    // /// <summary>Set pitch for a sound (1.0 is base level)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetSoundPitch(Sound sound, float pitch);
+    //
+    // /// <summary>Set pan for a sound (0.5 is center)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetSoundPan(Sound sound, float pan);
+    //
+    // /// <summary>Copy a wave to a new wave</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern Wave WaveCopy(Wave wave);
+    //
+    // /// <summary>Crop a wave to defined frames range</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void WaveCrop(Wave* wave, int initFrame, int finalFrame);
+    //
+    // /// <summary>Convert wave data to desired format</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void WaveFormat(Wave* wave, int sampleRate, int sampleSize, int channels);
+    //
+    // /// <summary>Get samples data from wave as a floats array</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern float* LoadWaveSamples(Wave wave);
+    //
+    // /// <summary>Unload samples data loaded with LoadWaveSamples()</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void UnloadWaveSamples(float* samples);
+    //
+    // // Music management functions
+    //
+    // /// <summary>Load music stream from file</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern Music LoadMusicStream(sbyte* fileName);
+    //
+    // /// <summary>Load music stream from memory buffer, fileType refers to extension: i.e. ".wav"</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern Music LoadMusicStreamFromMemory(sbyte* fileType, byte* data, int dataSize);
+    //
+    // /// <summary>Checks if a music stream is valid (context and buffers initialized)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool IsMusicValid(Music music);
+    //
+    // /// <summary>Unload music stream</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void UnloadMusicStream(Music music);
+    //
+    // /// <summary>Start music playing</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void PlayMusicStream(Music music);
+    //
+    // /// <summary>Check if music is playing</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool IsMusicStreamPlaying(Music music);
+    //
+    // /// <summary>Updates buffers for music streaming</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void UpdateMusicStream(Music music);
+    //
+    // /// <summary>Stop music playing</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void StopMusicStream(Music music);
+    //
+    // /// <summary>Pause music playing</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void PauseMusicStream(Music music);
+    //
+    // /// <summary>Resume playing paused music</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void ResumeMusicStream(Music music);
+    //
+    // /// <summary>Seek music to a position (in seconds)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SeekMusicStream(Music music, float position);
+    //
+    // /// <summary>Set volume for music (1.0 is max level)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetMusicVolume(Music music, float volume);
+    //
+    // /// <summary>Set pitch for a music (1.0 is base level)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetMusicPitch(Music music, float pitch);
+    //
+    // /// <summary>Set pan for a music (0.5 is center)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetMusicPan(Music music, float pan);
+    //
+    // /// <summary>Get music time length (in seconds)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern float GetMusicTimeLength(Music music);
+    //
+    // /// <summary>Get current music time played (in seconds)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern float GetMusicTimePlayed(Music music);
+    //
+    //
+    // // AudioStream management functions
+    //
+    // /// <summary>Init audio stream (to stream raw audio pcm data)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern AudioStream LoadAudioStream(uint sampleRate, uint sampleSize, uint channels);
+    //
+    // /// <summary>Checks if an audio stream is valid (buffers initialized)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool IsAudioStreamValid(AudioStream stream);
+    //
+    // /// <summary>Unload audio stream and free memory</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void UnloadAudioStream(AudioStream stream);
+    //
+    // /// <summary>Update audio stream buffers with data</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void UpdateAudioStream(AudioStream stream, void* data, int frameCount);
+    //
+    // /// <summary>Check if any audio stream buffers requires refill</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool IsAudioStreamProcessed(AudioStream stream);
+    //
+    // /// <summary>Play audio stream</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void PlayAudioStream(AudioStream stream);
+    //
+    // /// <summary>Pause audio stream</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void PauseAudioStream(AudioStream stream);
+    //
+    // /// <summary>Resume audio stream</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void ResumeAudioStream(AudioStream stream);
+    //
+    // /// <summary>Check if audio stream is playing</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern CBool IsAudioStreamPlaying(AudioStream stream);
+    //
+    // /// <summary>Stop audio stream</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void StopAudioStream(AudioStream stream);
+    //
+    // /// <summary>Set volume for audio stream (1.0 is max level)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetAudioStreamVolume(AudioStream stream, float volume);
+    //
+    // /// <summary>Set pitch for audio stream (1.0 is base level)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetAudioStreamPitch(AudioStream stream, float pitch);
+    //
+    // /// <summary>Set pan for audio stream (0.5 is centered)</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetAudioStreamPan(AudioStream stream, float pan);
+    //
+    // /// <summary>Default size for new audio streams</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetAudioStreamBufferSizeDefault(int size);
+    //
+    // /// <summary>Audio thread callback to request new data</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void SetAudioStreamCallback(
+    //     AudioStream stream,
+    //     delegate* unmanaged[Cdecl]<void*, uint, void> callback
+    // );
+    //
+    // /// <summary>Attach audio stream processor to stream</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void AttachAudioStreamProcessor(
+    //     AudioStream stream,
+    //     delegate* unmanaged[Cdecl]<void*, uint, void> processor
+    // );
+    //
+    // /// <summary>Detach audio stream processor from stream</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void DetachAudioStreamProcessor(
+    //     AudioStream stream,
+    //     delegate* unmanaged[Cdecl]<void*, uint, void> processor
+    // );
+    //
+    // /// <summary>Attach audio stream processor to the entire audio pipeline</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void AttachAudioMixedProcessor(
+    //     delegate* unmanaged[Cdecl]<void*, uint, void> processor
+    // );
+    //
+    // /// <summary>Detach audio stream processor from the entire audio pipeline</summary>
+    // [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    // public static extern void DetachAudioMixedProcessor(
+    //     delegate* unmanaged[Cdecl]<void*, uint, void> processor
+    // );
 }

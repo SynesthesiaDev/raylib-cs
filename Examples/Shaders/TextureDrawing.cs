@@ -36,11 +36,11 @@ public class TextureDrawing
         UnloadImage(imBlank);
 
         // NOTE: Using GLSL 330 shader version, on OpenGL ES 2.0 use GLSL 100 shader version
-        Shader shader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/cubes_panning.fs");
+        NativeShader nativeShader = LoadShader(null, $"resources/shaders/glsl{GlslVersion}/cubes_panning.fs");
 
         float time = 0.0f;
-        int timeLoc = GetShaderLocation(shader, "uTime");
-        Raylib.SetShaderValue(shader, timeLoc, time, ShaderUniformDataType.Float);
+        int timeLoc = GetShaderLocation(nativeShader, "uTime");
+        Raylib.SetShaderValue(nativeShader, timeLoc, time, ShaderUniformDataType.Float);
 
         SetTargetFPS(60);
         //--------------------------------------------------------------------------------------
@@ -51,7 +51,7 @@ public class TextureDrawing
             // Update
             //----------------------------------------------------------------------------------
             time = (float)GetTime();
-            Raylib.SetShaderValue(shader, timeLoc, time, ShaderUniformDataType.Float);
+            Raylib.SetShaderValue(nativeShader, timeLoc, time, ShaderUniformDataType.Float);
             //----------------------------------------------------------------------------------
 
             // Draw
@@ -60,7 +60,7 @@ public class TextureDrawing
             ClearBackground(Color.RayWhite);
 
             // Enable our custom shader for next shapes/textures drawings
-            BeginShaderMode(shader);
+            BeginShaderMode(nativeShader);
 
             // Drawing blank texture, all magic happens on shader
             DrawTexture(texture, 0, 0, Color.White);
@@ -76,7 +76,7 @@ public class TextureDrawing
 
         // De-Initialization
         //--------------------------------------------------------------------------------------
-        UnloadShader(shader);
+        UnloadShader(nativeShader);
 
         CloseWindow();
         //--------------------------------------------------------------------------------------

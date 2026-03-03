@@ -49,13 +49,13 @@ public class ImageDrawing
         UnloadImage(cat);
 
         // Load custom font for frawing on image
-        Font font = LoadFont("resources/fonts/custom_jupiter_crash.png");
+        NativeFont nativeFont = LoadFont("resources/fonts/custom_jupiter_crash.png");
 
         // Draw over image using custom font
-        ImageDrawTextEx(ref parrots, font, "PARROTS & CAT", new Vector2(300, 230), font.BaseSize, -2, Color.White);
+        ImageDrawTextEx(ref parrots, nativeFont, "PARROTS & CAT", new Vector2(300, 230), nativeFont.BaseSize, -2, Color.White);
 
         // Unload custom spritefont (already drawn used on image)
-        UnloadFont(font);
+        UnloadFont(nativeFont);
 
         Texture2D texture = LoadTextureFromImage(parrots);
         UnloadImage(parrots);

@@ -75,7 +75,7 @@ public unsafe struct Material
     /// <summary>
     /// Material shader
     /// </summary>
-    public Shader Shader;
+    public NativeShader NativeShader;
 
     // TODO: convert
     /// <summary>
