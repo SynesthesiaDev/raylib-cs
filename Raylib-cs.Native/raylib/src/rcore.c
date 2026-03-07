@@ -1650,6 +1650,20 @@ void SetTargetFPS(int fps)
     TRACELOG(LOG_INFO, "TIMER: Target time per frame: %02.03f milliseconds", (float)CORE.Time.target*1000.0f);
 }
 
+double GetTargetFPS()
+{
+    double target_fps;
+    if (CORE.Time.target > 0)
+    {
+        target_fps = 1.0 / CORE.Time.target;
+    } else
+    {
+        target_fps = 0.0;
+    }
+    
+    return target_fps;
+}
+
 // Get current FPS
 // NOTE: We calculate an average framerate
 int GetFPS(void)

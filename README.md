@@ -9,6 +9,7 @@ C# bindings for raylib. Modified for use in [Synesthesia Engine](https://github.
 - Renamed `Model` -> `NativeMode`
 - Renamed `Mesh` -> `NativeMesh`
 - Renamed `Transform` -> `NativeTransform`
+- Add `GetTargetFPS`
 
 ---
 

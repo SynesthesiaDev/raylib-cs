@@ -447,6 +447,10 @@ public static unsafe partial class Raylib
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern void SetTargetFPS(int fps);
 
+    /// <summary>Gets the target FPS</summary>
+    [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
+    public static extern double GetTargetFPS();
+
     /// <summary>Get current FPS</summary>
     [DllImport(NativeLibName, CallingConvention = CallingConvention.Cdecl)]
     public static extern int GetFPS();
